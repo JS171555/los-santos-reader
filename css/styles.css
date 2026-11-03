@@ -213,7 +213,7 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:foc
 }
 
 /* Ajustes pontuais solicitados: detalhe do livro e ações em formato de botão. */
-.detail .chips{justify-content:center}
+.detail .chips{justify-content:flex-start}
 .detail .chips .chip{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.2}
 a.btn,a.btn:visited{text-decoration:none}
 .book .fav{width:40px;height:40px;min-width:40px;min-height:40px;aspect-ratio:1/1;padding:0;display:grid;place-items:center;line-height:1;border-radius:50%;flex:none}
