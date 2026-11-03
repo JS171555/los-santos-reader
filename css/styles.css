@@ -236,30 +236,3 @@ a.btn,a.btn:visited{text-decoration:none}
  .reader .rctl{grid-template-columns:1fr;justify-content:center;gap:.15rem}
  .reader-tools{width:100%;justify-content:center}
 }
-
-/* No mobile, reposiciona os controles sem alterar estilos nem efeitos dos botões. */
-@media(max-width:800px){
- .reader .rbar{
-  display:grid;
-  grid-template-columns:40px minmax(0,1fr) max-content;
-  grid-template-rows:auto;
-  align-items:center;
-  gap:.35rem;
- }
- .reader #back{grid-column:1;grid-row:1}
- .reader .rt{grid-column:2;grid-row:1;min-width:0;order:initial}
- .reader .rctl{display:contents;order:initial;flex:none}
- .reader .reader-pages{grid-column:3;grid-row:1;justify-content:flex-end}
- .reader .reader-zoom{position:fixed;z-index:60;left:max(.5rem,env(safe-area-inset-left));bottom:calc(.5rem + env(safe-area-inset-bottom));}
- .reader .reader-actions{position:fixed;z-index:60;right:max(.5rem,env(safe-area-inset-right));bottom:calc(.5rem + env(safe-area-inset-bottom));}
-}
-@media(max-width:480px){
- .reader .reader-zoom,.reader .reader-actions{display:grid;grid-template-columns:repeat(2,42px);justify-content:center;align-items:center;gap:.2rem}
- .reader .reader-zoom #zo{grid-column:1;grid-row:1}
- .reader .reader-zoom #zi{grid-column:2;grid-row:1}
- .reader .reader-zoom #fw{grid-column:1;grid-row:2}
- .reader .reader-zoom #fh{grid-column:2;grid-row:2}
- .reader .reader-zoom #zl{grid-column:1/-1;grid-row:3}
- .reader .reader-zoom .sep{display:none}
- .reader .reader-actions .ib{width:42px;height:42px}
-}
