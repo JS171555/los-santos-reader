@@ -15,3 +15,9 @@ window.UI={
   gsap.fromTo(n,{opacity:0,y:12},{opacity:1,y:0,duration:.3});
  }
 };
+UI.modal=html=>{const o=document.createElement('div');o.className='ov';o.innerHTML=`<div class="modal card" role="dialog" aria-modal="true">${html}</div>`;document.body.append(o);
+ const close=()=>{document.removeEventListener('keydown',k);gsap.to(o,{opacity:0,duration:.15,onComplete:()=>o.remove()})},k=e=>e.key==='Escape'&&close();
+ o.addEventListener('mousedown',e=>e.target===o&&close());document.addEventListener('keydown',k);
+ gsap.from(o,{opacity:0,duration:.2});gsap.from(o.firstChild,{y:20,duration:.25});o.close=close;return o};
+UI.confirm=msg=>new Promise(res=>{const m=UI.modal(`<h3>Confirmar exclusão</h3><p class="sub">${msg}</p><div class="acts"><button class="btn ghost" data-v="0">Cancelar</button><button class="btn danger" data-v="1">Excluir</button></div>`);
+ m.onclick=e=>{const b=e.target.closest('[data-v]');if(b){m.close();res(b.dataset.v==='1')}}});

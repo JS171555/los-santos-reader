@@ -6,12 +6,12 @@
  $('#tabs').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;tab=b.dataset.t;document.querySelectorAll('#tabs .chip').forEach(x=>x.classList.toggle('on',x===b));go()};
  const go=()=>({dash:tDash,books:tBooks,cats:tCats})[tab]();
  async function tDash(){loading();
-  const [s,c]=await Promise.all([sb.rpc('admin_stats'),sb.from('categories').select('name,book_categories(count)')]);
+  const [s,c,t]=await Promise.all([sb.rpc('admin_stats'),sb.from('categories').select('name,book_categories(count)'),sb.rpc('admin_top')]);
   if(s.error||!s.data||c.error)return fail(tDash);
   const d=s.data,cc=c.data.map(x=>[x.name,x.book_categories[0].count]),max=Math.max(1,...cc.map(x=>x[1]));
-  pane.innerHTML=`<div class="row">${[['Usuários',d.users],['Livros cadastrados',d.books],['Livros publicados',d.published],['Categorias',d.categories],['Favoritos',d.favorites]].map(([l,v])=>`<div class="card"><small>${l}</small><strong class="big">${v}</strong></div>`).join('')}</div>
+  pane.innerHTML=`<div class="row">${[['Usuários',d.users],['Livros cadastrados',d.books],['Livros publicados',d.published],['Categorias',d.categories],['Favoritos',d.favorites],['Leituras iniciadas',d.reads_started],['Livros concluídos',d.reads_finished],['Páginas lidas (aprox.)',d.pages_read]].map(([l,v])=>`<div class="card"><small>${l}</small><strong class="big">${v}</strong></div>`).join('')}</div>
   <div class="card" style="margin-top:1rem"><h3>Livros por categoria</h3>${cc.map(([n,v])=>`<div class="bar2"><span>${E(n)}</span><i style="width:${v/max*100}%"></i><b>${v}</b></div>`).join('')||'<p class="sub">Nenhuma categoria criada.</p>'}</div>
-  <p class="sub" style="margin-top:1rem">Leituras, páginas lidas e rankings aparecem aqui a partir das Fases 3 e 4.</p>`}
+  <div class="row" style="margin-top:1rem"><div class="card"><h3>Usuários mais ativos</h3>${(t.data?.users||[]).map(u=>`<div class="bar2" style="grid-template-columns:1fr auto"><span>${E(u.name)}</span><b>${u.xp} XP</b></div>`).join('')||'<p class="sub">Sem dados ainda.</p>'}</div><div class="card"><h3>Livros mais lidos</h3>${(t.data?.books||[]).map(u=>`<div class="bar2" style="grid-template-columns:1fr auto"><span>${E(u.title)}</span><b>${u.reads} leitor(es)</b></div>`).join('')||'<p class="sub">Sem dados ainda.</p>'}</div></div>`}
  const bk=(l,k)=>`<button class="ib" data-a="${k}" aria-label="${l}" title="${l}">`;
  async function tBooks(){loading();
   const r=await sb.from('books').select('*,book_categories(category_id)').order('created_at',{ascending:false});if(r.error)return fail(tBooks);
@@ -32,7 +32,7 @@
   const f=(l,n,v='',ex='')=>`<div class="field"><label>${l}</label><input class="input" name="${n}" value="${E(v)}" ${ex}></div>`;
   const m=UI.modal(`<form id="bf"><h2>${b?'Editar livro':'Novo livro'}</h2>${f('Título','title',b?.title,'required maxlength=200')}${f('Autor','author',b?.author,'required maxlength=120')}
   <div class="field"><label>Descrição</label><textarea class="input" name="description">${E(b?.description)}</textarea></div>
-  ${f('Páginas','pages',b?.pages,'type=number min=1')}${f('Data de publicação','published_at',b?.published_at,'type=date')}${f('Tags (separadas por vírgula)','tags',b?.tags.join(', '))}
+  ${f('Segundos por página (base do XP)','sec_per_page',b?.sec_per_page??30,'type=number min=5 max=600')}${f('Páginas','pages',b?.pages,'type=number min=1')}${f('Data de publicação','published_at',b?.published_at,'type=date')}${f('Tags (separadas por vírgula)','tags',b?.tags.join(', '))}
   <div class="field"><label>Categorias</label><div class="checks">${cats.map(c=>`<label><input type="checkbox" name="cat" value="${c.id}" ${cur.includes(c.id)?'checked':''}>${E(c.name)}</label>`).join('')||'<small>Crie categorias na aba Categorias.</small>'}</div></div>
   <div class="field"><label>Capa (JPG, PNG ou WebP, até 5 MB)${b?.cover_path?' · já enviada':''}</label><input class="input" type="file" name="cover" accept="image/jpeg,image/png,image/webp"></div>
   <div class="field"><label>PDF (até 50 MB)${b?.pdf_path?' · já enviado':''}</label><input class="input" type="file" name="pdf" accept="application/pdf"></div>
@@ -44,7 +44,7 @@
    if(pdf.size&&(pdf.size>52428800||pdf.type!=='application/pdf'))return UI.toast('PDF inválido ou maior que 50 MB.','error');
    if(fm.get('pub')&&!pdf.size&&!b?.pdf_path)return UI.toast('Envie o PDF para publicar o livro.','error');
    UI.busy(btn,true);const id=b?.id||crypto.randomUUID(),old=[];
-   try{const row={title:fm.get('title').trim(),author:fm.get('author').trim(),description:fm.get('description').trim()||null,pages:+fm.get('pages')||null,published_at:fm.get('published_at')||null,
+   try{const row={title:fm.get('title').trim(),author:fm.get('author').trim(),description:fm.get('description').trim()||null,pages:+fm.get('pages')||null,sec_per_page:+fm.get('sec_per_page')||30,published_at:fm.get('published_at')||null,
      tags:fm.get('tags').split(',').map(x=>x.trim()).filter(Boolean),is_published:!!fm.get('pub'),is_featured:!!fm.get('feat')};
     if(cv.size){const p=`${id}/cover-${Date.now()}.${cv.type.split('/')[1]}`,u=await sb.storage.from('covers').upload(p,cv,{contentType:cv.type});if(u.error)throw u.error;if(b?.cover_path)old.push(['covers',b.cover_path]);row.cover_path=p}
     if(pdf.size){const p=`${id}/book-${Date.now()}.pdf`,u=await sb.storage.from('pdfs').upload(p,pdf,{contentType:'application/pdf'});if(u.error)throw u.error;if(b?.pdf_path)old.push(['pdfs',b.pdf_path]);row.pdf_path=p}
