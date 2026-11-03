@@ -1,0 +1,118 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <title>Entrar · San Reads</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Figtree:wght@400;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <div class="auth">
+            <section class="brand">
+                <h1>Street<br />Pages</h1>
+                <p>Sua biblioteca digital. Leia, evolua e suba no ranking da cidade.</p>
+            </section>
+            <section class="form-side">
+                <div class="card">
+                    <div id="login" data-panel>
+                        <h2>Entrar</h2>
+                        <p class="sub">Continue de onde parou.</p>
+                        <form id="f-login">
+                            <div class="field">
+                                <label for="le">E-mail</label
+                                ><input class="input" id="le" name="email" type="email" autocomplete="email" required />
+                            </div>
+                            <div class="field">
+                                <label for="lp">Senha</label
+                                ><input
+                                    class="input"
+                                    id="lp"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    required
+                                />
+                            </div>
+                            <button class="btn" style="width: 100%" type="submit">Entrar</button>
+                        </form>
+                        <p class="alt">
+                            <button class="link" data-go="forgot">Esqueci a senha</button> ·
+                            <button class="link" data-go="register">Criar conta</button>
+                        </p>
+                    </div>
+                    <div id="register" data-panel hidden>
+                        <h2>Criar conta</h2>
+                        <p class="sub">Leva menos de um minuto.</p>
+                        <form id="f-register">
+                            <div class="field">
+                                <label for="rn">Nome</label
+                                ><input
+                                    class="input"
+                                    id="rn"
+                                    name="name"
+                                    minlength="2"
+                                    maxlength="40"
+                                    autocomplete="name"
+                                    required
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="re">E-mail</label
+                                ><input class="input" id="re" name="email" type="email" autocomplete="email" required />
+                            </div>
+                            <div class="field">
+                                <label for="rp">Senha (mín. 8 caracteres)</label
+                                ><input
+                                    class="input"
+                                    id="rp"
+                                    name="password"
+                                    type="password"
+                                    minlength="8"
+                                    autocomplete="new-password"
+                                    required
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="rc">Confirmar senha</label
+                                ><input
+                                    class="input"
+                                    id="rc"
+                                    name="confirm"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    required
+                                />
+                            </div>
+                            <button class="btn" style="width: 100%" type="submit">Criar conta</button>
+                        </form>
+                        <p class="alt">Já tem conta? <button class="link" data-go="login">Entrar</button></p>
+                    </div>
+                    <div id="forgot" data-panel hidden>
+                        <h2>Recuperar senha</h2>
+                        <p class="sub">Enviaremos um link para o seu e-mail.</p>
+                        <form id="f-forgot">
+                            <div class="field">
+                                <label for="fe">E-mail</label
+                                ><input class="input" id="fe" name="email" type="email" required />
+                            </div>
+                            <button class="btn" style="width: 100%" type="submit">Enviar link</button>
+                        </form>
+                        <p class="alt"><button class="link" data-go="login">Voltar para entrar</button></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+        <script src="js/config.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/pages/login.js"></script>
+    </body>
+</html>
