@@ -3,9 +3,9 @@
   <h1>Los Santos Reader</h1>
   <p><strong>Biblioteca digital para ler, acompanhar seu progresso e evoluir no seu ritmo.</strong></p>
   <p>
-    <img src="https://img.shields.io/badge/status-em%20desenvolvimento-5C6B4A?style=flat-square" alt="Status: em desenvolvimento">
-    <img src="https://img.shields.io/badge/PWA-instal%C3%A1vel-DCCAA3?style=flat-square&labelColor=121212" alt="PWA instalável">
-    <img src="https://img.shields.io/badge/idioma-pt--BR-8B5E3C?style=flat-square" alt="Idioma: português do Brasil">
+    <img src="https://img.shields.io/badge/status-em%20desenvolvimento-66744F?style=flat-square&labelColor=171915" alt="Status: em desenvolvimento">
+    <img src="https://img.shields.io/badge/PWA-instal%C3%A1vel-66744F?style=flat-square&labelColor=171915" alt="PWA instalável">
+    <img src="https://img.shields.io/badge/idioma-pt--BR-66744F?style=flat-square&labelColor=171915" alt="Idioma: português do Brasil">
   </p>
 </div>
 
@@ -13,7 +13,7 @@ O **Los Santos Reader** é uma aplicação web de leitura com uma interface escu
 
 ## Identidade visual
 
-A interface usa uma paleta restrita e consistente: carvão `#171915` como fundo, superfícies grafite `#20231D` e `#292D25`, oliva `#66744F` para ações e estados selecionados, areia `#D8C69F` para destaques tipográficos e marrom `#76543B` apenas como detalhe secundário. Estados de erro e sucesso usam tons discretos e semânticos.
+A interface usa uma paleta restrita e consistente: carvão `#171915` como fundo, superfícies grafite `#20231D` e `#292D25`, oliva `#66744F` reservado às ações principais e ao foco, areia `#D8C69F` para títulos, seleções e progresso, e marrom `#76543B` em pequenos detalhes de leitura e gráficos. Estados de erro e sucesso usam tons discretos e semânticos.
 
 ## Recursos
 
