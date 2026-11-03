@@ -217,3 +217,22 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:foc
 .detail .chips .chip{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.2}
 a.btn,a.btn:visited{text-decoration:none}
 .book .fav{width:40px;height:40px;min-width:40px;min-height:40px;aspect-ratio:1/1;padding:0;display:grid;place-items:center;line-height:1;border-radius:50%;flex:none}
+
+/* Posicionamento dos controles do leitor, sem alterar a aparência existente. */
+.reader .rbar{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:.5rem 1rem}
+.reader .rctl{display:grid;grid-template-columns:auto auto auto;align-items:center;justify-content:space-between;gap:.5rem;min-width:0}
+.reader-tools{display:flex;align-items:center;justify-content:center;gap:.25rem;min-width:0}
+@media(max-width:1100px){
+ .reader .rbar{grid-template-columns:auto minmax(0,1fr)}
+ .reader .rt{min-width:0}
+ .reader .rctl{grid-column:1/-1;grid-row:2;grid-template-columns:repeat(3,max-content);justify-content:space-between;width:100%}
+}
+@media(max-width:800px){
+ .reader .rbar{grid-template-columns:auto minmax(0,1fr)}
+ .reader-tools{justify-content:center}
+}
+@media(max-width:420px){
+ .reader .rbar{grid-template-columns:auto minmax(0,1fr)}
+ .reader .rctl{grid-template-columns:1fr;justify-content:center;gap:.15rem}
+ .reader-tools{width:100%;justify-content:center}
+}
