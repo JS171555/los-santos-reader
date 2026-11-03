@@ -156,3 +156,58 @@ main h1{font-size:clamp(2.4rem,4vw,3.6rem);line-height:.98;margin-bottom:1.35rem
 }
 @media(min-width:1200px){.grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1.4rem}.side{padding:1.7rem 1.2rem}.nav{padding-inline:1rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Interação mobile: comportamento tátil consistente sem bloquear leitura ou edição de texto. */
+html{
+ -webkit-tap-highlight-color:transparent;
+ overscroll-behavior-x:none;
+}
+body{
+ -webkit-touch-callout:none;
+ -webkit-user-select:none;
+ user-select:none;
+ overscroll-behavior-x:none;
+}
+input,textarea,select,[contenteditable="true"],[contenteditable=""],.book h3,.book p,main p,main dd,main dt,main small,main strong,.rt{
+ -webkit-user-select:text;
+ user-select:text;
+ -webkit-touch-callout:default;
+}
+img,svg,canvas,video,.fa-solid,.fa-regular,.fa-brands{
+ -webkit-user-drag:none;
+ user-drag:none;
+ -webkit-user-select:none;
+ user-select:none;
+}
+button,a,[role="button"],.chip,.nav,.fav,.ib,.cv,label.btn{
+ -webkit-tap-highlight-color:transparent;
+ touch-action:manipulation;
+}
+button,a,[role="button"],.chip,.nav,.fav,.ib{
+ transition:background-color .16s ease,border-color .16s ease,color .16s ease,transform .16s cubic-bezier(.2,.75,.25,1),box-shadow .16s ease,opacity .16s ease;
+}
+button:active,a:active,[role="button"]:active,.chip:active,.nav:active,.fav:active,.ib:active{
+ transform:scale(.97);
+}
+button:disabled,.btn:disabled,[aria-disabled="true"]{
+ opacity:.48;
+ cursor:not-allowed;
+ transform:none;
+ box-shadow:none;
+}
+button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:focus:not(:focus-visible){outline:none}
+@media(max-width:800px){
+ html,body{overscroll-behavior-y:none}
+ body{padding-bottom:env(safe-area-inset-bottom)}
+ .side{padding-bottom:calc(.45rem + env(safe-area-inset-bottom))}
+ .shell{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+ .reader{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh}
+ .reader .rbar{padding-top:max(.45rem,env(safe-area-inset-top))}
+ .reader .stage{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+ button,.btn,.ib,.fav,.chip{min-height:42px}
+ .ib{min-width:42px;min-height:42px}
+}
+@media(prefers-reduced-motion:reduce){
+ button,a,[role="button"],.chip,.nav,.fav,.ib{transition:none}
+ button:active,a:active,[role="button"]:active,.chip:active,.nav:active,.fav:active,.ib:active{transform:none}
+}
