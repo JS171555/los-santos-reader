@@ -11,6 +11,10 @@
 
 O **Los Santos Reader** é uma aplicação web de leitura com uma interface escura inspirada em Los Santos. O projeto está em desenvolvimento e reúne biblioteca, leitor de páginas, conta de usuário e recursos de acompanhamento de leitura. Também pode ser instalado como aplicativo (PWA) em dispositivos compatíveis.
 
+## Identidade visual
+
+A interface usa uma paleta restrita e consistente: carvão `#171915` como fundo, superfícies grafite `#20231D` e `#292D25`, oliva `#66744F` para ações e estados selecionados, areia `#D8C69F` para destaques tipográficos e marrom `#76543B` apenas como detalhe secundário. Estados de erro e sucesso usam tons discretos e semânticos.
+
 ## Recursos
 
 - Biblioteca com busca e navegação por categorias.
