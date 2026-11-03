@@ -1,0 +1,21 @@
+(async()=>{
+ const ctx=await Shell.init('profile');if(!ctx)return;
+ const $=s=>document.querySelector(s),sb=App.sb,E=D.esc,uid=ctx.user.id;let p=ctx.profile;
+ const av=()=>{$('#avprev').innerHTML=p.avatar_url?`<img class="avbig" alt="Sua foto" src="${D.avatar(p.avatar_url)}">`:`<span class="avbig" aria-hidden="true">${E(p.display_name[0].toUpperCase())}</span>`;$('#rm').hidden=!p.avatar_url};
+ const fill=()=>{$('#n').value=p.display_name;$('#pp').checked=p.profile_public;$('#sr').checked=p.show_in_ranking;$('#rt').value=p.reader_theme;$('#rf').value=p.reader_fit;$('#na').checked=p.notify_achievements;$('#nx').checked=p.notify_xp;av()};
+ const upd=async(patch,msg,btn)=>{btn&&UI.busy(btn,true);const {data,error}=await sb.from('profiles').update(patch).eq('id',uid).select().single();btn&&UI.busy(btn,false);
+  if(error){UI.toast('Não foi possível salvar.','error');return false}p=data;Rewards.prefs=p;UI.toast(msg,'success');return true};
+ const on=(id,fn)=>$(id).onsubmit=e=>{e.preventDefault();fn(e.submitter,e.target)};
+ on('#f-name',(b,f)=>{const v=f.n.value.trim();if(v.length<2||v.length>40)return UI.toast('O nome precisa ter de 2 a 40 caracteres.','error');upd({display_name:v},'Nome atualizado.',b).then(av)});
+ on('#f-priv',(b,f)=>upd({profile_public:f.pp.checked,show_in_ranking:f.sr.checked},'Privacidade atualizada.',b));
+ on('#f-read',async(b,f)=>{if(await upd({reader_theme:f.rt.value,reader_fit:f.rf.value},'Preferências salvas.',b)){try{localStorage.setItem('reader-theme',f.rt.value)}catch{}}});
+ on('#f-not',(b,f)=>upd({notify_achievements:f.na.checked,notify_xp:f.nx.checked},'Notificações atualizadas.',b));
+ on('#f-pw',async(b,f)=>{if(f.p1.value.length<8)return UI.toast('A senha precisa ter ao menos 8 caracteres.','error');if(f.p1.value!==f.p2.value)return UI.toast('As senhas não coincidem.','error');
+  UI.busy(b,true);const {error}=await App.auth.setPassword(f.p1.value);UI.busy(b,false);error?UI.toast(App.err(error),'error'):(UI.toast('Senha alterada.','success'),f.reset())});
+ $('#af').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+  if(f.size>2097152||!/^image\/(jpeg|png|webp)$/.test(f.type))return UI.toast('Use JPG, PNG ou WebP de até 2 MB.','error');
+  const path=`${uid}/avatar-${Date.now()}.${f.type.split('/')[1]}`,u=await sb.storage.from('avatars').upload(path,f,{contentType:f.type});if(u.error)return UI.toast('Falha no envio da foto.','error');
+  const old=p.avatar_url;if(await upd({avatar_url:path},'Foto atualizada.')){av();if(old)sb.storage.from('avatars').remove([old])}else sb.storage.from('avatars').remove([path])};
+ $('#rm').onclick=async()=>{const old=p.avatar_url;if(await upd({avatar_url:null},'Foto removida.')){av();sb.storage.from('avatars').remove([old])}};
+ $('#out3').onclick=()=>App.auth.signOut();fill();gsap.from('main .card',{opacity:0,y:12,duration:.35,stagger:.06});
+})();

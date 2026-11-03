@@ -1,7 +1,7 @@
 (async()=>{
  const $=s=>document.querySelector(s),id=new URLSearchParams(location.search).get('id'),sb=App.sb,E=D.esc;
  if(!App.configured)return location.replace('login.html');
- const ctx=await App.auth.requireAuth();if(!ctx)return;
+ const ctx=await App.auth.requireAuth();if(!ctx)return;window.Rewards&&(Rewards.prefs=ctx.profile);
  $('#back').href='book.html?id='+id;
  const fatal=m=>{$('#stage').innerHTML=`<div class="card empty" style="margin:auto"><i class="fa-solid fa-triangle-exclamation"></i><h3>${m}</h3><a class="btn" href="app.html">Voltar à biblioteca</a></div>`};
  if(!id)return fatal('Livro não informado');
@@ -12,8 +12,8 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   pdf=await pdfjsLib.getDocument(u.data.signedUrl).promise}catch{return fatal('Não foi possível abrir o livro')}
  document.title=book.title+' · Leitor';$('#rt').textContent=book.title;
- const N=pdf.numPages;let page=Math.min(Math.max(prog?.last_page||1,1),N),mode='width',scale=1,busy=false,again=false,first=true;
- try{document.body.dataset.theme=localStorage.getItem('reader-theme')||'dark'}catch{}
+ const N=pdf.numPages;let page=Math.min(Math.max(prog?.last_page||1,1),N),mode=ctx.profile.reader_fit||'width',scale=1,busy=false,again=false,first=true;
+ try{document.body.dataset.theme=localStorage.getItem('reader-theme')||ctx.profile.reader_theme||'dark'}catch{}
  const ui=()=>{$('#pi').value=page;$('#pi').max=N;$('#pt').textContent='/ '+N;$('#pb').style.width=page/N*100+'%';$('#zl').textContent=Math.round(scale*100)+'%';
   const on=bms.some(b=>b.page===page),i=$('#bm');i.setAttribute('aria-pressed',on);i.firstElementChild.className=`fa-${on?'solid':'regular'} fa-bookmark`};
  async function render(){
