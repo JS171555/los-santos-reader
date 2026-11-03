@@ -263,3 +263,30 @@ a.btn,a.btn:visited{text-decoration:none}
  .reader .reader-zoom .sep{display:none}
  .reader .reader-actions .ib{width:42px;height:42px}
 }
+
+/* Controles móveis permanecem dentro da barra do leitor, não fixos na tela. */
+@media(max-width:800px){
+ .reader .rbar{
+  position:relative;
+  display:grid;
+  grid-template-columns:40px minmax(0,1fr) max-content;
+  grid-template-rows:auto auto;
+  align-items:center;
+  gap:.25rem .4rem;
+ }
+ .reader #back{grid-column:1;grid-row:1}
+ .reader .rt{grid-column:2;grid-row:1;min-width:0}
+ .reader .rctl{display:contents}
+ .reader .reader-pages{position:static;grid-column:3;grid-row:1;justify-self:end}
+ .reader .reader-zoom{position:static;grid-column:1;grid-row:2;justify-self:start;align-self:center}
+ .reader .reader-actions{position:static;grid-column:3;grid-row:2;justify-self:end;align-self:center}
+}
+@media(max-width:480px){
+ .reader .reader-zoom,.reader .reader-actions{display:grid;grid-template-columns:repeat(2,42px);justify-content:center;align-items:center;gap:.15rem}
+ .reader .reader-zoom #zo{grid-column:1;grid-row:1}
+ .reader .reader-zoom #zi{grid-column:2;grid-row:1}
+ .reader .reader-zoom #fw{grid-column:1;grid-row:2}
+ .reader .reader-zoom #fh{grid-column:2;grid-row:2}
+ .reader .reader-zoom #zl{grid-column:1/-1;grid-row:3}
+ .reader .reader-zoom .sep{display:none}
+}
