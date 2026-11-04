@@ -226,3 +226,6 @@ a.btn,a.btn:visited{text-decoration:none}
 .shelf-track .book h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
 .shelf-track::-webkit-scrollbar{height:7px}.shelf-track::-webkit-scrollbar-track{background:#ffffff0d;border-radius:99px}.shelf-track::-webkit-scrollbar-thumb{background:#5C6B4A;border-radius:99px}
 @media(max-width:800px){.book-shelf{margin-bottom:1.25rem}.shelf-track{gap:.8rem;padding-bottom:.65rem}.shelf-track>.book{flex-basis:clamp(108px,32vw,136px);width:clamp(108px,32vw,136px)}}
+/* Oculta a barra dos carrosséis; a rolagem por gesto/toque continua ativa. */
+.shelf-track{scrollbar-width:none}
+.shelf-track::-webkit-scrollbar{display:none;width:0;height:0}
