@@ -1,93 +1,113 @@
 <div align="center">
-  <img src="assets/pwa/icon-512.png" alt="Ícone do Los Santos Reader" width="160" height="160">
+  <img src="assets/logo-transparent.png" alt="Los Santos Reader — símbolo do livro" width="180">
   <h1>Los Santos Reader</h1>
-  <p><strong>Biblioteca digital para ler, acompanhar seu progresso e evoluir no seu ritmo.</strong></p>
+  <p><strong>Uma biblioteca digital para ler, acompanhar seu progresso e evoluir no seu ritmo.</strong></p>
   <p>
-    <img src="https://img.shields.io/badge/status-em%20desenvolvimento-5C6B4A?style=flat-square" alt="Status: em desenvolvimento">
+    <img src="https://img.shields.io/badge/status-conclu%C3%ADdo-5C6B4A?style=flat-square" alt="Status: concluído">
     <img src="https://img.shields.io/badge/PWA-instal%C3%A1vel-DCCAA3?style=flat-square&labelColor=121212" alt="PWA instalável">
     <img src="https://img.shields.io/badge/idioma-pt--BR-8B5E3C?style=flat-square" alt="Idioma: português do Brasil">
   </p>
 </div>
 
-O **Los Santos Reader** é uma aplicação web de leitura com uma interface escura inspirada em Los Santos. O projeto está em desenvolvimento e reúne biblioteca, leitor de páginas, conta de usuário e recursos de acompanhamento de leitura. Também pode ser instalado como aplicativo (PWA) em dispositivos compatíveis.
+O **Los Santos Reader** é um aplicativo web responsivo de leitura, com identidade visual inspirada em Los Santos. Reúne biblioteca digital, leitura de livros em PDF, acompanhamento de progresso, gamificação e administração de catálogo. Pode ser usado no navegador ou instalado como **Progressive Web App (PWA)** em dispositivos compatíveis.
+
+> **Status do produto: concluído.** O código do aplicativo e seus principais fluxos estão implementados. Para executar uma instalação própria, ainda é necessário configurar o projeto Supabase, aplicar o banco de dados, cadastrar as credenciais dos provedores externos e publicar o site em HTTPS.
 
 ## Recursos
 
-- Biblioteca com busca e navegação por categorias.
-- Leitor de livros em PDF, com controles de página, zoom, ajuste de visualização e tela cheia.
-- Marcadores de página e acompanhamento do progresso de leitura.
-- Cadastro, autenticação, perfil e configurações de conta.
-- Recursos de metas, recompensas e ranking.
-- Área administrativa para gerenciar o catálogo.
-- PWA instalável, com cache dos arquivos principais da interface e página de contingência offline.
+- **Biblioteca:** busca de livros, categorias, detalhes e capas.
+- **Leitor PDF:** navegação por páginas, zoom, ajuste de visualização, tela cheia, marcadores e retomada do progresso.
+- **Conta e autenticação:** cadastro e login por e-mail e senha, recuperação de senha, perfil e login com Google via Supabase Auth.
+- **Acompanhamento:** favoritos, metas de leitura, histórico e estatísticas de atividade.
+- **Gamificação:** pontos de experiência, níveis, conquistas e ranking.
+- **Administração:** painel para gerenciar livros, PDFs, capas e categorias.
+- **Preferências:** tema e opções do leitor, além de configurações de perfil.
+- **PWA:** instalação em dispositivos compatíveis, cache do shell da aplicação e página de contingência offline.
+- **Interface adaptável:** layout responsivo para desktop e dispositivos móveis.
 
-> O acesso à conta, ao catálogo remoto, aos arquivos armazenados e à sincronização depende de conexão com a internet e da configuração do Supabase. O modo offline mantém a estrutura principal do aplicativo disponível quando os arquivos já foram armazenados no dispositivo; não substitui o backend nem garante acesso offline a livros ou dados remotos.
+## Páginas do aplicativo
 
-## Instalação como aplicativo
+| Página | Arquivo | Finalidade |
+| --- | --- | --- |
+| Login, cadastro e recuperação | `login.html`, `reset.html` | Acesso à conta e recuperação de senha |
+| Biblioteca | `app.html` | Busca e navegação pelo catálogo |
+| Livro e leitor | `book.html`, `reader.html` | Detalhes do livro e leitura de PDF |
+| Progresso e conquistas | `game.html` | Metas, histórico, XP, conquistas e ranking |
+| Perfil e preferências | `profile.html`, `settings.html` | Dados da conta e personalização |
+| Administração | `admin.html` | Gestão do catálogo e categorias |
+| Experiência offline | `offline.html` | Página exibida quando não há conexão |
 
-O aplicativo precisa estar publicado em **HTTPS** para que a instalação e o service worker funcionem fora de `localhost`. Após abrir o endereço publicado no navegador compatível, use a opção de instalação indicada abaixo. O nome dos menus pode variar conforme a versão do navegador e do sistema.
+## Tecnologias
 
-### Android
+- HTML, CSS e JavaScript no navegador, sem etapa de build obrigatória.
+- [Supabase](https://supabase.com/) para autenticação, banco PostgreSQL, políticas RLS e armazenamento.
+- Supabase Auth com e-mail/senha e OAuth Google.
+- GSAP para animações e PDF.js para renderização de documentos PDF.
+- Service Worker e Web App Manifest para os recursos PWA.
 
-1. Abra o endereço do Los Santos Reader no Chrome.
-2. Abra o menu do navegador e escolha **Instalar app** ou **Adicionar à tela inicial**.
-3. Confirme. O ícone do Los Santos Reader será adicionado ao dispositivo.
+As dependências de interface são carregadas pelos endereços CDN indicados nos arquivos HTML; portanto, a primeira visita e recursos externos dependem de conexão com a internet.
 
-### iPhone e iPad
+## Executar localmente
 
-1. Abra o endereço no Safari.
-2. Toque em **Compartilhar**.
-3. Escolha **Adicionar à Tela de Início** e confirme.
-
-No iOS, a instalação é feita pelo menu de compartilhamento do Safari; a experiência e os recursos offline são definidos pelo próprio sistema.
-
-### Windows
-
-1. Abra o endereço no Microsoft Edge ou em outro navegador Chromium compatível.
-2. Selecione **Instalar Los Santos Reader** na barra de endereço ou no menu do navegador.
-3. Confirme a instalação para abrir o app em uma janela própria.
-
-## Execução local
-
-Como o PWA depende de um contexto seguro, use `localhost` em vez de abrir os arquivos diretamente com `file://`.
+Use um servidor HTTP local — não abra os arquivos diretamente com `file://`. O contexto seguro de `localhost` permite testar os recursos do PWA.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Depois, acesse `http://localhost:8000` no navegador.
+Abra [http://localhost:8000](http://localhost:8000). Para que login e recursos remotos funcionem, configure antes o Supabase conforme os passos abaixo.
 
-## Configuração do Supabase
+## Configurar o Supabase
 
-A configuração da aplicação fica em `js/config.js` e utiliza a URL do projeto e uma chave pública (`anon`/`publishable`). Nunca coloque uma chave `service_role` no código do cliente. Para uma instalação própria, configure também as tabelas, políticas de segurança (RLS), autenticação e armazenamento conforme os scripts SQL em `sql/`.
+1. Crie um projeto no Supabase e copie a URL do projeto e a chave pública `anon`/`publishable`.
+2. Preencha `SUPABASE_URL` e `SUPABASE_ANON_KEY` em `js/config.js`. Use apenas a chave pública no frontend; **nunca** publique uma chave `service_role` ou segredo de provedor no repositório.
+3. No SQL Editor do Supabase, execute, em ordem, `sql/001_fase1.sql`, `sql/002_fase2.sql`, `sql/003_fase3.sql`, `sql/004_fase4.sql` e `sql/005_fase5.sql`. Os scripts criam a estrutura de dados, políticas e recursos usados pelo aplicativo.
+4. Configure os provedores de autenticação e URLs de redirecionamento. No fluxo de cadastro por e-mail, configure também confirmação e envio de e-mail no Supabase.
+5. Para conceder acesso administrativo à própria conta, depois de criá-la, substitua `SEU@EMAIL` em `sql/promover_admin.sql` pelo e-mail correto e execute o comando conforme a política de acesso do seu projeto.
 
-### Login com Google (OAuth)
-As telas de login e cadastro já incluem **Entrar com Google**. Para ativar, no Google Cloud crie um cliente OAuth 2.0 do tipo aplicativo Web e adicione como URI de redirecionamento autorizado a URL de callback exibida no painel do Supabase (formato `https://<PROJECT_REF>.supabase.co/auth/v1/callback`). No Supabase, acesse **Authentication → Providers → Google**, habilite o provedor e informe o Client ID e o Client Secret fornecidos pelo Google. Em **Authentication → URL Configuration**, defina o Site URL do app e adicione à lista de URLs de redirecionamento permitidas a URL completa da página de login publicada (por exemplo, `https://seu-dominio/login.html`) e, para desenvolvimento, `http://localhost:8000/login.html`.
+As políticas de segurança do banco (RLS) são essenciais: não as desative para contornar erros de acesso. Revise as políticas e permissões antes de inserir dados reais ou disponibilizar o projeto publicamente.
 
-O fluxo usa `signInWithOAuth`, retorna à página `login.html` e redireciona a sessão autenticada para `app.html`; falhas retornadas pelo provedor são exibidas na interface. O botão reutiliza `assets/google-logo.png`. A chave secreta do Google deve ficar somente nas configurações do provedor no Supabase, nunca no código-fonte. Para os testes em produção, o domínio publicado também deve estar permitido na configuração de URLs do Supabase.
+### Login com Google
 
-## Estrutura do projeto
+O botão **Entrar com Google** está disponível nas telas de login e cadastro. Para habilitá-lo:
+
+1. No Google Cloud Console, crie um cliente OAuth 2.0 do tipo **Aplicativo da Web**.
+2. Em **URIs de redirecionamento autorizados** no Google, adicione a URL de callback informada na configuração do provedor Google no Supabase, normalmente `https://<PROJECT_REF>.supabase.co/auth/v1/callback`.
+3. No Supabase, abra **Authentication → Providers → Google**, habilite o provedor e informe o Client ID e o Client Secret do Google.
+4. Em **Authentication → URL Configuration**, configure o Site URL publicado e inclua nas URLs de redirecionamento permitidas a URL da página de login, por exemplo `https://seu-dominio/login.html`. Para desenvolvimento, inclua também `http://localhost:8000/login.html`.
+
+O fluxo retorna à página de login e encaminha a sessão autenticada para a biblioteca. Erros devolvidos pelo provedor são apresentados ao usuário. O Client Secret deve permanecer apenas no painel do Supabase.
+
+## Publicação e instalação PWA
+
+Publique todos os arquivos do projeto em um host estático com **HTTPS**. Atualize as URLs autorizadas do Supabase para corresponder ao domínio de produção. O acesso à conta, ao catálogo e à sincronização exige conexão e backend configurado.
+
+Em dispositivos compatíveis, abra o site publicado no navegador e use **Instalar app** ou **Adicionar à tela inicial**. No iOS, a instalação é feita pelo menu **Compartilhar → Adicionar à Tela de Início** no Safari.
+
+O modo offline mantém o shell e a página de contingência disponíveis conforme o cache do navegador. Ele **não** substitui o Supabase e não garante acesso offline à conta, ao catálogo remoto, aos PDFs ou aos demais dados remotos.
+
+## Estrutura do repositório
 
 ```text
 .
-├── assets/          # Capas e recursos visuais
-│   └── pwa/         # Ícones para PWA, iOS e Windows
-├── css/             # Estilos da aplicação
-├── js/              # Autenticação, dados e páginas
-├── sql/             # Migrações e políticas do banco
-├── tests/           # Testes de segurança e integração
-├── manifest.webmanifest
-├── sw.js            # Cache do shell e fallback offline
-└── *.html           # Páginas da aplicação
+├── admin.html, app.html, book.html, reader.html, ...  # páginas do app
+├── assets/                                            # logo, capas e ícones
+├── css/styles.css                                     # estilos e layout responsivo
+├── js/                                                # autenticação, dados e páginas
+├── sql/                                               # esquema, políticas e funções do banco
+├── tests/                                             # verificações de segurança/integração
+├── manifest.webmanifest                               # metadados PWA
+└── sw.js                                              # cache do shell e fallback offline
 ```
 
-## Compatibilidade e observações
+## Segurança e operação
 
-- A instalação PWA requer HTTPS em produção; `localhost` é aceito para desenvolvimento.
-- O service worker armazena arquivos locais do shell e aplica fallback para a página offline. Dados e conteúdo remoto não são replicados pelo cache.
-- O conteúdo de livros e PDFs pode depender da rede e dos serviços configurados; a disponibilidade offline de conteúdo remoto não é garantida.
-- O projeto está em desenvolvimento. Alguns recursos podem mudar.
+- Mantenha no cliente somente a URL do Supabase e a chave pública `anon`/`publishable`.
+- Guarde Client Secrets e chaves administrativas em configurações seguras do serviço, nunca em arquivos servidos ao navegador.
+- Ative e teste as políticas RLS antes de usar dados de usuários reais.
+- Use HTTPS em produção para autenticação e instalação PWA.
+- Disponibilidade de login social, confirmação de e-mail, armazenamento e dados depende das configurações do projeto Supabase.
 
 ## Licença
 
-Nenhuma licença foi especificada no repositório. Consulte o proprietário antes de redistribuir ou reutilizar o código e os materiais do projeto.
+O repositório não especifica uma licença. Consulte o proprietário antes de redistribuir o código ou os materiais visuais.
