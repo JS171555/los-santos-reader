@@ -61,6 +61,11 @@ Depois, acesse `http://localhost:8000` no navegador.
 
 A configuração da aplicação fica em `js/config.js` e utiliza a URL do projeto e uma chave pública (`anon`/`publishable`). Nunca coloque uma chave `service_role` no código do cliente. Para uma instalação própria, configure também as tabelas, políticas de segurança (RLS), autenticação e armazenamento conforme os scripts SQL em `sql/`.
 
+### Login com Google (OAuth)
+As telas de login e cadastro já incluem **Entrar com Google**. Para ativar, no Google Cloud crie um cliente OAuth 2.0 do tipo aplicativo Web e adicione como URI de redirecionamento autorizado a URL de callback exibida no painel do Supabase (formato `https://<PROJECT_REF>.supabase.co/auth/v1/callback`). No Supabase, acesse **Authentication → Providers → Google**, habilite o provedor e informe o Client ID e o Client Secret fornecidos pelo Google. Em **Authentication → URL Configuration**, defina o Site URL do app e adicione à lista de URLs de redirecionamento permitidas a URL completa da página de login publicada (por exemplo, `https://seu-dominio/login.html`) e, para desenvolvimento, `http://localhost:8000/login.html`.
+
+O fluxo usa `signInWithOAuth`, retorna à página `login.html` e redireciona a sessão autenticada para `app.html`; falhas retornadas pelo provedor são exibidas na interface. O botão reutiliza `assets/google-logo.png`. A chave secreta do Google deve ficar somente nas configurações do provedor no Supabase, nunca no código-fonte. Para os testes em produção, o domínio publicado também deve estar permitido na configuração de URLs do Supabase.
+
 ## Estrutura do projeto
 
 ```text
