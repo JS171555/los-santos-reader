@@ -229,3 +229,6 @@ a.btn,a.btn:visited{text-decoration:none}
 /* Oculta a barra dos carrosséis; a rolagem por gesto/toque continua ativa. */
 .shelf-track{scrollbar-width:none}
 .shelf-track::-webkit-scrollbar{display:none;width:0;height:0}
+/* Oculta globalmente as barras sem desativar a rolagem dos elementos. */
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{display:none;width:0;height:0}
