@@ -1,4 +1,4 @@
-const CACHE_NAME = 'los-santos-reader-shell-v8';
+const CACHE_NAME = 'los-santos-reader-shell-v9';
 const APP_SHELL = [
   './', './index.html', './offline.html', './login.html', './app.html', './book.html',
   './reader.html', './game.html', './profile.html', './settings.html', './admin.html', './reset.html',
@@ -6,7 +6,7 @@ const APP_SHELL = [
   './js/config.js', './js/ui.js', './js/auth.js', './js/shell.js', './js/data.js', './js/rewards.js', './js/pwa.js',
   './js/pages/admin.js', './js/pages/app.js', './js/pages/book.js', './js/pages/game.js',
   './js/pages/library.js', './js/pages/login.js', './js/pages/profile.js', './js/pages/reader.js', './js/pages/reset.js', './js/pages/settings.js',
-  './assets/pwa/icon-192.png', './assets/pwa/icon-512.png', './assets/pwa/apple-touch-icon.png', './assets/pwa/favicon-48.png'
+  './assets/pwa/icon.svg'
 ];
 
 self.addEventListener('install', (event) => {
