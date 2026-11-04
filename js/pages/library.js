@@ -14,7 +14,7 @@
   else{const ft=f.filter(b=>b.is_featured),cr=f.filter(b=>prog.get(b.id)?.status==='reading');view.innerHTML=(cr.length?sec('Continuar lendo',cr):'')+(ft.length?sec('Em destaque',ft):'')+sec('Lançamentos',f.slice(0,6))+cats.map(c=>{const cb=f.filter(b=>D.catIds(b).includes(c.id));return cb.length?sec(c.name,cb):''}).join('')+sec('Todos os livros',f)}
   gsap.from('.book',{opacity:0,y:14,duration:.35,stagger:.025})}
  async function load(){
-  view.innerHTML='<div class="grid">'+'<div class="sk" style="aspect-ratio:2/3"></div>'.repeat(8)+'</div>';
+  view.innerHTML=`<div class="grid shelf-track" aria-label="Carregando capas">${'<div class="book" aria-hidden="true"><div class="cv sk"></div></div>'.repeat(8)}</div>`;
   try{const [b,c,f,p]=await Promise.all([D.books(st.q),App.sb.from('categories').select('*').order('name'),App.sb.from('favorites').select('book_id'),App.sb.from('reading_progress').select('book_id,status,updated_at')]);
    if(b.error||c.error||f.error)throw 0;
    if(!visitInitialized){
