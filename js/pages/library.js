@@ -18,9 +18,10 @@
   try{const [b,c,f,p]=await Promise.all([D.books(st.q),App.sb.from('categories').select('*').order('name'),App.sb.from('favorites').select('book_id'),App.sb.from('reading_progress').select('book_id,status,updated_at')]);
    if(b.error||c.error||f.error)throw 0;
    if(!visitInitialized){
-    const previous=localStorage.getItem('lsr-home-order-v1'),signature=items=>items.map(x=>String(x.id)).join('|');let ordered=shuffle(b.data);
+    let previous=null;try{previous=localStorage.getItem('lsr-home-order-v1')}catch{}
+    const signature=items=>items.map(x=>String(x.id)).join('|');let ordered=shuffle(b.data);
     if(ordered.length>1&&signature(ordered)===previous)[ordered[0],ordered[1]]=[ordered[1],ordered[0]];
-    books=ordered;visitOrder=new Map(ordered.map((item,index)=>[item.id,index]));localStorage.setItem('lsr-home-order-v1',signature(ordered));visitInitialized=true;
+    books=ordered;visitOrder=new Map(ordered.map((item,index)=>[item.id,index]));try{localStorage.setItem('lsr-home-order-v1',signature(ordered))}catch{}visitInitialized=true;
    }else books=[...b.data].sort((a,b)=>(visitOrder.get(a.id)??Number.MAX_SAFE_INTEGER)-(visitOrder.get(b.id)??Number.MAX_SAFE_INTEGER));
    cats=c.data;favs=new Set(f.data.map(x=>x.book_id));prog=new Map((p.data||[]).map(x=>[x.book_id,x]));chips();draw()}
   catch{D.err(view,load)}}

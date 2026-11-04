@@ -5,7 +5,7 @@
  async function load(){
   if(!id)return nf();
   try{const [b,f,pg]=await Promise.all([App.sb.from('books').select('*,book_categories(categories(id,name))').eq('id',id).maybeSingle(),App.sb.from('favorites').select('book_id').eq('book_id',id),App.sb.from('reading_progress').select('last_page,status').eq('book_id',id).maybeSingle()]);
-   if(b.error||f.error)throw 0;if(!b.data)return nf();const x=b.data,t=D.esc(x.title);if(f.data.length)favs.add(id);
+   if(b.error||f.error||pg.error)throw 0;if(!b.data)return nf();const x=b.data,t=D.esc(x.title);if(f.data.length)favs.add(id);
    document.title=x.title+' · Los Santos Reader';
    box.innerHTML=`<div class="detail"><div class="cv">${x.cover_path?`<img alt="Capa de ${t}" src="${D.cover(x.cover_path)}">`:`<span>${t}</span>`}</div>
    <div><a href="app.html"><i class="fa-solid fa-arrow-left"></i> Biblioteca</a><h1 style="margin:.6rem 0 .2rem">${t}</h1><p class="sub">${D.esc(x.author)}</p>

@@ -25,7 +25,7 @@
  async function tHis(reset=true){
   if(reset){xpHistory=[];xpOffset=0;xpHasMore=true}
   if(xpLoading)return;xpLoading=true;if(!xpHistory.length)loading();
-  const r=await sb.from('xp_transactions').select('*,books(title)').order('created_at',{ascending:false}).range(xpOffset,xpOffset+XP_PAGE_SIZE-1);xpLoading=false;
+  const r=await sb.from('xp_transactions').select('*,books(title)').order('created_at',{ascending:false}).order('id',{ascending:false}).range(xpOffset,xpOffset+XP_PAGE_SIZE-1);xpLoading=false;
   if(r.error)return fail(()=>tHis(reset));
   xpHistory.push(...r.data);xpOffset+=r.data.length;xpHasMore=r.data.length===XP_PAGE_SIZE;
   const K={pages:'Páginas lidas',completion:'Livro concluído',daily:'Bônus do dia',goal:'Meta diária batida'};
