@@ -1,6 +1,6 @@
 (async()=>{
  const ctx=await Shell.init('game');if(!ctx)return;
- const $=s=>document.querySelector(s),pane=$('#pane'),sb=App.sb,E=D.esc;let tab='sum',per='week';
+ const $=s=>document.querySelector(s),pane=$('#pane'),sb=App.sb,E=D.esc;let tab='sum',per='week',xpHistory=[],xpOffset=0,xpHasMore=false,xpLoading=false;const XP_PAGE_SIZE=20;
  const lvl=x=>Math.floor(Math.sqrt(x/100))+1,loading=()=>pane.innerHTML='<div class="sk" style="height:160px"></div>',fail=fn=>D.err(pane,fn),
   em=(i,h,p)=>`<div class="card empty"><i class="fa-solid fa-${i}"></i><h3>${h}</h3><p class="sub">${p}</p></div>`;
  $('#tabs').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;tab=b.dataset.t;document.querySelectorAll('#tabs .chip').forEach(x=>x.classList.toggle('on',x===b));go()};
@@ -22,8 +22,15 @@
  async function tAch(){loading();const [a,u]=await Promise.all([sb.from('achievements').select('*').order('sort'),sb.from('user_achievements').select('code,unlocked_at')]);if(a.error||u.error)return fail(tAch);
   const got=new Map(u.data.map(x=>[x.code,x.unlocked_at])),card=x=>`<div class="card ach ${got.has(x.code)?'on':''}"><i class="fa-solid fa-${E(x.icon)}"></i><h3>${E(x.name)}</h3><small>${got.has(x.code)?'Desbloqueada em '+D.fmt(got.get(x.code).slice(0,10)):E(x.description)}</small></div>`;
   pane.innerHTML=`<p class="sub">${got.size} de ${a.data.length} desbloqueadas</p><div class="row">${a.data.filter(x=>got.has(x.code)).map(card).join('')}${a.data.filter(x=>!got.has(x.code)).map(card).join('')}</div>`;gsap.from('.ach',{opacity:0,y:12,stagger:.04,duration:.3})}
- async function tHis(){loading();const r=await sb.from('xp_transactions').select('*,books(title)').order('created_at',{ascending:false}).limit(40);if(r.error)return fail(tHis);
+ async function tHis(reset=true){
+  if(reset){xpHistory=[];xpOffset=0;xpHasMore=true}
+  if(xpLoading)return;xpLoading=true;if(!xpHistory.length)loading();
+  const r=await sb.from('xp_transactions').select('*,books(title)').order('created_at',{ascending:false}).range(xpOffset,xpOffset+XP_PAGE_SIZE-1);xpLoading=false;
+  if(r.error)return fail(()=>tHis(reset));
+  xpHistory.push(...r.data);xpOffset+=r.data.length;xpHasMore=r.data.length===XP_PAGE_SIZE;
   const K={pages:'Páginas lidas',completion:'Livro concluído',daily:'Bônus do dia',goal:'Meta diária batida'};
-  pane.innerHTML=r.data.length?`<div class="card">${r.data.map(t=>`<div class="item"><div><strong>${K[t.kind]}${t.pages?' · '+t.pages+' pág.':''}</strong><small>${E(t.books?.title||'')} ${new Date(t.created_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</small></div><b>+${t.xp} XP</b></div>`).join('')}</div>`:em('clock-rotate-left','Nenhum XP ainda','Leia no leitor: cada página validada rende XP.')}
+  pane.innerHTML=xpHistory.length?`<div class="card">${xpHistory.map(t=>`<div class="item"><div><strong>${K[t.kind]||'XP recebido'}${t.pages?' · '+t.pages+' pág.':''}</strong><small>${E(t.books?.title||'')} ${new Date(t.created_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</small></div><b>+${t.xp} XP</b></div>`).join('')}</div>${xpHasMore?'<div class="acts" style="justify-content:center;margin-top:1rem"><button class="btn ghost" id="more-xp">Carregar mais</button></div>':''}`:em('clock-rotate-left','Nenhum XP ainda','Leia no leitor: cada página validada rende XP.');
+  const more=$('#more-xp');if(more)more.onclick=()=>tHis(false);
+ }
  tSum();
 })();
