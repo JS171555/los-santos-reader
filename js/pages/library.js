@@ -12,7 +12,7 @@
   else if(!f.length)view.innerHTML=empty('magnifying-glass',st.fav?'Você ainda não tem favoritos':'Nada encontrado',st.fav?'Toque no coração de um livro para guardá-lo aqui.':'Tente outro termo ou categoria.');
   else if(st.q||st.cat||st.fav||st.prog)view.innerHTML=sec('Resultados',f);
   else{const ft=f.filter(b=>b.is_featured),cr=f.filter(b=>prog.get(b.id)?.status==='reading');view.innerHTML=(cr.length?sec('Continuar lendo',cr):'')+(ft.length?sec('Em destaque',ft):'')+sec('Lançamentos',f.slice(0,6))+cats.map(c=>{const cb=f.filter(b=>D.catIds(b).includes(c.id));return cb.length?sec(c.name,cb):''}).join('')+sec('Todos os livros',f)}
-  gsap.from('.book',{opacity:0,y:14,duration:.35,stagger:.025})}
+  gsap.from([...view.querySelectorAll('.book')].slice(0,24),{opacity:0,y:14,duration:.35,stagger:.025})}
  let searchSeq=0;
  function orderBooks(rows){
   if(!visitInitialized){let previous=null;try{previous=localStorage.getItem('lsr-home-order-v1')}catch{}

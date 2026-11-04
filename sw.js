@@ -1,4 +1,4 @@
-const CACHE_NAME = 'los-santos-reader-shell-v11';
+const CACHE_NAME = 'los-santos-reader-shell-v12';
 const APP_SHELL = [
   './', './index.html', './offline.html', './login.html', './app.html', './book.html',
   './reader.html', './game.html', './profile.html', './settings.html', './admin.html', './reset.html',
@@ -39,11 +39,14 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(caches.match(request).then((cached) => cached || fetch(request).then((response) => {
-    if (response.ok) {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-    }
-    return response;
-  })));
+  // Stale-while-revalidate: responde do cache e atualiza em segundo plano
+  event.respondWith(caches.open(CACHE_NAME).then(async (cache) => {
+    const cached = await cache.match(request);
+    const network = fetch(request).then((response) => {
+      if (response.ok) cache.put(request, response.clone());
+      return response;
+    }).catch(() => cached);
+    if (cached) { event.waitUntil(network); return cached; }
+    return network;
+  }));
 });
