@@ -6,13 +6,13 @@
  const fatal=m=>{$('#stage').innerHTML=`<div class="card empty" style="margin:auto"><i class="fa-solid fa-triangle-exclamation"></i><h3>${m}</h3><a class="btn" href="app.html">Voltar à biblioteca</a></div>`};
  if(!id)return fatal('Livro não informado');
  let book,prog,bms,pdf;
- try{const [b,p,m]=await Promise.all([sb.from('books').select('id,title,pdf_path').eq('id',id).maybeSingle(),sb.from('reading_progress').select('*').eq('book_id',id).maybeSingle(),sb.from('bookmarks').select('*').eq('book_id',id).order('page')]);
+ try{const [b,p,m]=await Promise.all([sb.from('books').select('id,title,pdf_path,pages').eq('id',id).maybeSingle(),sb.from('reading_progress').select('*').eq('book_id',id).maybeSingle(),sb.from('bookmarks').select('*').eq('book_id',id).order('page')]);
   if(b.error||p.error||m.error)throw 0;book=b.data;if(!book?.pdf_path)return fatal('Livro indisponível');prog=p.data;bms=m.data;
   const u=await sb.storage.from('pdfs').createSignedUrl(book.pdf_path,3600);if(u.error)throw 0;
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   pdf=await pdfjsLib.getDocument(u.data.signedUrl).promise}catch{return fatal('Não foi possível abrir o livro')}
  document.title=book.title+' · Leitor';$('#rt').textContent=book.title;
- const N=pdf.numPages;let page=Math.min(Math.max(prog?.last_page||1,1),N),mode=ctx.profile.reader_fit||'width',scale=1,busy=false,again=false,first=true;
+ const N=pdf.numPages;if(!Number.isInteger(book.pages)||book.pages!==N)return fatal('A contagem de páginas deste PDF não corresponde ao catálogo. Avise um administrador para corrigir os dados do livro.');let page=Math.min(Math.max(prog?.last_page||1,1),N),mode=ctx.profile.reader_fit||'width',scale=1,busy=false,again=false,first=true;
  try{document.body.dataset.theme=localStorage.getItem('reader-theme')||ctx.profile.reader_theme||'dark'}catch{}
  const ui=()=>{$('#pi').value=page;$('#pi').max=N;$('#pt').textContent='/ '+N;$('#pb').style.width=page/N*100+'%';$('#zl').textContent=Math.round(scale*100)+'%';
   const on=bms.some(b=>b.page===page),i=$('#bm');i.setAttribute('aria-pressed',on);i.firstElementChild.className=`fa-${on?'solid':'regular'} fa-bookmark`};

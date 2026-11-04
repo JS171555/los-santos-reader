@@ -61,11 +61,17 @@ Abra [http://localhost:8000](http://localhost:8000). Para que login e recursos r
 
 1. Crie um projeto no Supabase e copie a URL do projeto e a chave pública `anon`/`publishable`.
 2. Preencha `SUPABASE_URL` e `SUPABASE_ANON_KEY` em `js/config.js`. Use apenas a chave pública no frontend; **nunca** publique uma chave `service_role` ou segredo de provedor no repositório.
-3. No SQL Editor do Supabase, execute, em ordem, `sql/001_fase1.sql`, `sql/002_fase2.sql`, `sql/003_fase3.sql`, `sql/004_fase4.sql` e `sql/005_fase5.sql`. Os scripts criam a estrutura de dados, políticas e recursos usados pelo aplicativo.
+3. No SQL Editor do Supabase, execute, em ordem, `sql/001_fase1.sql`, `sql/002_fase2.sql`, `sql/003_fase3.sql`, `sql/004_fase4.sql`, `sql/005_fase5.sql` e `sql/006_auditoria_integridade.sql`. A fase 6 é incremental: em bancos existentes, execute somente essa fase após conferir e preencher a contagem correta de páginas de cada livro publicado. Não derive esse dado do progresso antigo, pois era informado pelo cliente.
 4. Configure os provedores de autenticação e URLs de redirecionamento. No fluxo de cadastro por e-mail, configure também confirmação e envio de e-mail no Supabase.
 5. Para conceder acesso administrativo à própria conta, depois de criá-la, substitua `SEU@EMAIL` em `sql/promover_admin.sql` pelo e-mail correto e execute o comando conforme a política de acesso do seu projeto.
 
 As políticas de segurança do banco (RLS) são essenciais: não as desative para contornar erros de acesso. Revise as políticas e permissões antes de inserir dados reais ou disponibilizar o projeto publicamente.
+
+Livros publicados precisam ter `books.pages` preenchido com a contagem real do PDF. A migração 006 mostra os registros que precisam de revisão; até corrigir seus metadados, o leitor não gravará progresso nesses livros. Essa referência no catálogo permite ao servidor ignorar contagens arbitrárias enviadas pelo navegador.
+
+### Testes de integração
+
+O smoke test de RLS altera dados e, por segurança, recusa qualquer URL que não seja localhost. Execute-o apenas com uma conta e um livro descartáveis no Supabase local: instale `@supabase/supabase-js@2.45.4` temporariamente e defina `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `USER_EMAIL`, `USER_PASSWORD` e `TEST_BOOK_ID` antes de executar `node tests/rls-smoke.mjs`. Não use credenciais nem IDs de produção.
 
 ### Login com Google
 

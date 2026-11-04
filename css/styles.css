@@ -163,9 +163,9 @@ html{
  overscroll-behavior-x:none;
 }
 body{
- -webkit-touch-callout:none;
- -webkit-user-select:none;
- user-select:none;
+ -webkit-touch-callout:default;
+ -webkit-user-select:text;
+ user-select:text;
  overscroll-behavior-x:none;
 }
 input,textarea,select,[contenteditable="true"],[contenteditable=""],.book h3,.book p,main p,main dd,main dt,main small,main strong,.rt{
@@ -230,9 +230,6 @@ a.btn,a.btn:visited{text-decoration:none}
 /* Oculta a barra dos carrosséis; a rolagem por gesto/toque continua ativa. */
 .shelf-track{scrollbar-width:none}
 .shelf-track::-webkit-scrollbar{display:none;width:0;height:0}
-/* Oculta globalmente as barras sem desativar a rolagem dos elementos. */
-*{scrollbar-width:none;-ms-overflow-style:none}
-*::-webkit-scrollbar{display:none;width:0;height:0}
 @media(max-width:800px) and (orientation:landscape){
  main{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
  .form-side{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}

@@ -22,8 +22,9 @@
   pane.onclick=async e=>{const a=e.target.closest('[data-a]');if(!a)return;const b=L.find(x=>x.id===a.closest('.item').dataset.id);
    if(a.dataset.a==='edit')return bookForm(b);
    if(a.dataset.a==='del'){if(!await UI.confirm(`Excluir <b>${E(b.title)}</b>? Capa e PDF também serão removidos.`))return;
-    await sb.storage.from('covers').remove([b.cover_path].filter(Boolean));await sb.storage.from('pdfs').remove([b.pdf_path].filter(Boolean));
-    const {error}=await sb.from('books').delete().eq('id',b.id);error?UI.toast('Não foi possível excluir.','error'):(UI.toast('Livro excluído.','success'),tBooks());return}
+    const {error}=await sb.from('books').delete().eq('id',b.id);if(error)return UI.toast('Não foi possível excluir o livro.','error');
+    const files=await Promise.all([sb.storage.from('covers').remove([b.cover_path].filter(Boolean)),sb.storage.from('pdfs').remove([b.pdf_path].filter(Boolean))]);
+    if(files.some(x=>x.error))UI.toast('Livro excluído, mas não foi possível remover todos os arquivos.','error');else UI.toast('Livro excluído.','success');tBooks();return}
    const patch=a.dataset.a==='pub'?{is_published:!b.is_published}:{is_featured:!b.is_featured};
    const {error}=await sb.from('books').update(patch).eq('id',b.id);error?UI.toast('Não foi possível atualizar. Publicar exige um PDF.','error'):(UI.toast('Livro atualizado.','success'),tBooks())}}
  async function bookForm(b){
@@ -32,7 +33,7 @@
   const f=(l,n,v='',ex='')=>`<div class="field"><label>${l}</label><input class="input" name="${n}" value="${E(v)}" ${ex}></div>`;
   const m=UI.modal(`<form id="bf"><h2>${b?'Editar livro':'Novo livro'}</h2>${f('Título','title',b?.title,'required maxlength=200')}${f('Autor','author',b?.author,'required maxlength=120')}
   <div class="field"><label>Descrição</label><textarea class="input" name="description">${E(b?.description)}</textarea></div>
-  ${f('Segundos por página (base do XP)','sec_per_page',b?.sec_per_page??30,'type=number min=5 max=600')}${f('Páginas','pages',b?.pages,'type=number min=1')}${f('Data de publicação','published_at',b?.published_at,'type=date')}${f('Tags (separadas por vírgula)','tags',b?.tags.join(', '))}
+  ${f('Segundos por página (base do XP)','sec_per_page',b?.sec_per_page??30,'type=number min=5 max=600')}${f('Páginas','pages',b?.pages,'type=number min=1 max=20000')}${f('Data de publicação','published_at',b?.published_at,'type=date')}${f('Tags (separadas por vírgula)','tags',b?.tags.join(', '))}
   <div class="field"><label>Categorias</label><div class="checks">${cats.map(c=>`<label><input type="checkbox" name="cat" value="${c.id}" ${cur.includes(c.id)?'checked':''}>${E(c.name)}</label>`).join('')||'<small>Crie categorias na aba Categorias.</small>'}</div></div>
   <div class="field"><label>Capa (JPG, PNG ou WebP, até 5 MB)${b?.cover_path?' · já enviada':''}</label><input class="input" type="file" name="cover" accept="image/jpeg,image/png,image/webp"></div>
   <div class="field"><label>PDF (até 50 MB)${b?.pdf_path?' · já enviado':''}</label><input class="input" type="file" name="pdf" accept="application/pdf"></div>
@@ -43,14 +44,15 @@
    if(cv.size&&(cv.size>5242880||!/^image\/(jpeg|png|webp)$/.test(cv.type)))return UI.toast('Capa inválida: use JPG, PNG ou WebP até 5 MB.','error');
    if(pdf.size&&(pdf.size>52428800||pdf.type!=='application/pdf'))return UI.toast('PDF inválido ou maior que 50 MB.','error');
    if(fm.get('pub')&&!pdf.size&&!b?.pdf_path)return UI.toast('Envie o PDF para publicar o livro.','error');
+   if(fm.get('pub')&&(!Number.isInteger(+fm.get('pages'))||+fm.get('pages')<1))return UI.toast('Informe a contagem correta de páginas antes de publicar.','error');
    UI.busy(btn,true);const id=b?.id||App.uuid(),old=[];
    try{const row={title:fm.get('title').trim(),author:fm.get('author').trim(),description:fm.get('description').trim()||null,pages:+fm.get('pages')||null,sec_per_page:+fm.get('sec_per_page')||30,published_at:fm.get('published_at')||null,
      tags:fm.get('tags').split(',').map(x=>x.trim()).filter(Boolean),is_published:!!fm.get('pub'),is_featured:!!fm.get('feat')};
     if(cv.size){const p=`${id}/cover-${Date.now()}.${cv.type.split('/')[1]}`,u=await sb.storage.from('covers').upload(p,cv,{contentType:cv.type});if(u.error)throw u.error;if(b?.cover_path)old.push(['covers',b.cover_path]);row.cover_path=p}
     if(pdf.size){const p=`${id}/book-${Date.now()}.pdf`,u=await sb.storage.from('pdfs').upload(p,pdf,{contentType:'application/pdf'});if(u.error)throw u.error;if(b?.pdf_path)old.push(['pdfs',b.pdf_path]);row.pdf_path=p}
     const w=b?await sb.from('books').update(row).eq('id',id):await sb.from('books').insert({...row,id});if(w.error)throw w.error;
-    await sb.from('book_categories').delete().eq('book_id',id);const ids=fm.getAll('cat');
-    if(ids.length){const c=await sb.from('book_categories').insert(ids.map(category_id=>({book_id:id,category_id})));if(c.error)throw c.error}
+    const cats=await sb.rpc('set_book_categories',{p_book:id,p_categories:fm.getAll('cat')});if(cats.error){
+     UI.busy(btn,false);m.close();UI.toast('Livro salvo, mas as categorias não foram atualizadas. Reabra a edição para tentar novamente.','error');tBooks();return}
     for(const [bu,p] of old)await sb.storage.from(bu).remove([p]);
     UI.toast('Livro salvo.','success');m.close();tBooks()}
    catch{UI.toast('Não foi possível salvar o livro. Tente novamente.','error');UI.busy(btn,false)}}}
