@@ -217,3 +217,12 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:foc
 .detail .chips .chip{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.2}
 a.btn,a.btn:visited{text-decoration:none}
 .book .fav{width:40px;height:40px;min-width:40px;min-height:40px;aspect-ratio:1/1;padding:0;display:grid;place-items:center;line-height:1;border-radius:50%;flex:none}
+
+/* Prateleiras horizontais da tela inicial da biblioteca */
+.book-shelf{margin:0 0 1.65rem;min-width:0}
+.book-shelf .sec{margin:1.35rem 0 .8rem;font-size:clamp(1.35rem,2.5vw,1.75rem)}
+.shelf-track{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:1rem;padding:.15rem .15rem .85rem;scroll-snap-type:x proximity;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#5C6B4A #ffffff0d}
+.shelf-track>.book{flex:0 0 clamp(112px,14vw,154px);width:clamp(112px,14vw,154px);min-width:0;scroll-snap-align:start}
+.shelf-track .book h3{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.shelf-track::-webkit-scrollbar{height:7px}.shelf-track::-webkit-scrollbar-track{background:#ffffff0d;border-radius:99px}.shelf-track::-webkit-scrollbar-thumb{background:#5C6B4A;border-radius:99px}
+@media(max-width:800px){.book-shelf{margin-bottom:1.25rem}.shelf-track{gap:.8rem;padding-bottom:.65rem}.shelf-track>.book{flex-basis:clamp(108px,32vw,136px);width:clamp(108px,32vw,136px)}}
