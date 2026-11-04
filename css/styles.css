@@ -243,3 +243,7 @@ a.btn,a.btn:visited{text-decoration:none}
 /* Login social via Google */
 .auth-divider{display:flex;align-items:center;gap:.8rem;margin:1.1rem 0;color:var(--muted);font-size:.82rem}.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:var(--line)}
 .google-btn{width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;gap:.7rem;padding:0 1.25rem;border:1px solid #ffffff25;border-radius:var(--r);background:#fff;color:#202124;font:700 1rem var(--fb);cursor:pointer;transition:background .18s,border-color .18s,transform .18s}.google-btn:hover{background:#f5f5f5;border-color:#ffffff70;transform:translateY(-1px)}.google-btn:focus-visible{outline:3px solid #9aae75;outline-offset:2px}.google-btn img{object-fit:contain}
+/* XP e notificações: área segura do iPhone (notch / barra inferior) e telas pequenas */
+#toasts{top:max(1.2rem,calc(env(safe-area-inset-top) + .6rem));right:max(1.2rem,env(safe-area-inset-right));pointer-events:none}.toast{pointer-events:auto}
+.xp-pop{bottom:calc(22% + env(safe-area-inset-bottom));white-space:nowrap;-webkit-user-select:none;user-select:none}
+@media(max-width:800px){#toasts{left:50%;right:auto;transform:translateX(-50%);width:min(calc(100vw - 2rem),380px)}.xp-pop{bottom:calc(96px + env(safe-area-inset-bottom))}}
