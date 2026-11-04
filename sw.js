@@ -1,4 +1,4 @@
-const CACHE_NAME = 'los-santos-reader-shell-v6';
+const CACHE_NAME = 'los-santos-reader-shell-v7';
 const APP_SHELL = [
   './', './index.html', './offline.html', './login.html', './app.html', './book.html',
   './reader.html', './game.html', './profile.html', './settings.html', './admin.html', './reset.html',
