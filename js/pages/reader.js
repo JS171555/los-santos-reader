@@ -1,7 +1,7 @@
 (async()=>{
  const $=s=>document.querySelector(s),id=new URLSearchParams(location.search).get('id'),sb=App.sb,E=D.esc;
  if(!App.configured)return location.replace('login.html');
- const ctx=await App.auth.requireAuth();if(!ctx)return;window.Rewards&&(Rewards.prefs=ctx.profile);
+ const ctx=await App.auth.requireAuth();if(!ctx)return;await window.Rewards?.init(ctx.user.id,ctx.profile);
  $('#back').href='book.html?id='+id;
  const fatal=m=>{$('#stage').innerHTML=`<div class="card empty" style="margin:auto"><i class="fa-solid fa-triangle-exclamation"></i><h3>${m}</h3><a class="btn" href="app.html">Voltar à biblioteca</a></div>`};
  if(!id)return fatal('Livro não informado');
