@@ -20,14 +20,14 @@
   if(busy){again=true;return}busy=true;
   do{again=false;const pg=await pdf.getPage(page),v0=pg.getViewport({scale:1}),st=$('#stage');
    scale=mode==='width'?(st.clientWidth-32)/v0.width:mode==='height'?(st.clientHeight-32)/v0.height:scale;
-   const d=devicePixelRatio||1,vp=pg.getViewport({scale:scale*d}),c=$('#cv');c.width=vp.width;c.height=vp.height;c.style.width=vp.width/d+'px';c.style.height=vp.height/d+'px';
+   const dpr=Math.min(window.devicePixelRatio||1,2),base=pg.getViewport({scale:scale*dpr}),ratio=Math.min(1,Math.sqrt(4e6/(base.width*base.height)),4096/base.width,4096/base.height),d=dpr*ratio,vp=pg.getViewport({scale:scale*d}),c=$('#cv');c.width=vp.width;c.height=vp.height;c.style.width=vp.width/d+'px';c.style.height=vp.height/d+'px';
    await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
    if(first){first=false;$('#rsk').remove();c.hidden=false;if(prog&&page>1)UI.toast('Continuando da página '+page+'.','info')}
   }while(again);busy=false;ui()}
  const go=n=>{n=Math.min(Math.max(Math.round(+n)||page,1),N);if(n===page)return ui();page=n;dirty=true;$('#stage').scrollTo(0,0);render();clearTimeout(tm);tm=setTimeout(save,2500)};
  const zoom=f=>{mode='free';scale=Math.min(4,Math.max(.3,scale*f));render()},fit=m=>{mode=m;render()};
  // Tempo ativo: conta só com aba visível, janela em foco e atividade nos últimos 60 s
- const sess=crypto.randomUUID();let act=0,sent=0,idle=Date.now(),dirty=true,chain=Promise.resolve(),done=prog?.status==='finished',tm;
+ const sess=App.uuid();let act=0,sent=0,idle=Date.now(),dirty=true,chain=Promise.resolve(),done=prog?.status==='finished',tm;
  ['pointermove','pointerdown','keydown','wheel','touchstart','scroll'].forEach(e=>addEventListener(e,()=>idle=Date.now(),{passive:true,capture:true}));
  setInterval(()=>{if(!document.hidden&&document.hasFocus()&&Date.now()-idle<6e4)act++},1000);
  function save(){chain=chain.then(async()=>{const sec=Math.min(act-sent,120);if(!dirty&&!sec)return;
@@ -37,8 +37,8 @@
  $('#pv').onclick=()=>go(page-1);$('#nx').onclick=()=>go(page+1);$('#pi').onchange=e=>go(e.target.value);
  $('#zo').onclick=()=>zoom(.85);$('#zi').onclick=()=>zoom(1.2);$('#fw').onclick=()=>fit('width');$('#fh').onclick=()=>fit('height');
  $('#th').onclick=()=>{const t=document.body.dataset.theme==='dark'?'light':'dark';document.body.dataset.theme=t;try{localStorage.setItem('reader-theme',t)}catch{}};
- $('#fs').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();
- document.addEventListener('fullscreenchange',()=>$('#fs').firstElementChild.className='fa-solid fa-'+(document.fullscreenElement?'compress':'expand'));
+ const fs=$('#fs');if(!document.fullscreenEnabled||!document.documentElement.requestFullscreen)fs.hidden=true;else{fs.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{UI.toast('Tela cheia indisponível neste navegador.','info')}}}
+ document.addEventListener('fullscreenchange',()=>{fs.firstElementChild.className='fa-solid fa-'+(document.fullscreenElement?'compress':'expand');fs.setAttribute('aria-label',document.fullscreenElement?'Sair da tela cheia':'Tela cheia')});
  $('#bm').onclick=async()=>{const b=bms.find(x=>x.page===page);
   if(b){const {error}=await sb.from('bookmarks').delete().eq('id',b.id);if(error)return UI.toast('Não foi possível remover o marcador.','error');bms=bms.filter(x=>x!==b);UI.toast('Marcador removido.','info')}
   else{const {data,error}=await sb.from('bookmarks').insert({book_id:id,page}).select().single();if(error)return UI.toast('Não foi possível salvar o marcador.','error');bms.push(data);bms.sort((a,c)=>a.page-c.page);UI.toast('Página '+page+' marcada.','success')}ui()};
@@ -47,8 +47,9 @@
    if(t.dataset.d){const {error}=await sb.from('bookmarks').delete().eq('id',t.dataset.d);if(error)return UI.toast('Erro ao excluir.','error');bms=bms.filter(b=>b.id!==t.dataset.d);draw();ui()}}};
  addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||document.querySelector('.ov'))return;
   ({ArrowRight:()=>go(page+1),PageDown:()=>go(page+1),ArrowLeft:()=>go(page-1),PageUp:()=>go(page-1),Home:()=>go(1),End:()=>go(N)})[e.key]?.()});
- let tx,ty;$('#stage').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
- $('#stage').addEventListener('touchend',e=>{if(mode==='free')return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>60&&Math.abs(dy)<40)go(page+(dx<0?1:-1))},{passive:true});
+ let tx=null,ty=null;$('#stage').addEventListener('touchstart',e=>{if(e.touches.length!==1){tx=ty=null;return}tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+ $('#stage').addEventListener('touchend',e=>{if(tx===null||ty===null||mode==='free'||e.changedTouches.length!==1){tx=ty=null;return}const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=ty=null;if(Math.abs(dx)>60&&Math.abs(dy)<40)go(page+(dx<0?1:-1))},{passive:true});
+ $('#stage').addEventListener('touchcancel',()=>{tx=ty=null},{passive:true});
  let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>mode!=='free'&&render(),200)});
  await render();save();
 })();

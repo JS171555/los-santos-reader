@@ -201,12 +201,13 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible),[role="button"]:foc
  body{padding-bottom:env(safe-area-inset-bottom)}
  .side{padding-bottom:calc(.45rem + env(safe-area-inset-bottom))}
  .shell{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
- .reader{height:100vh;height:100dvh;min-height:100vh;min-height:100dvh}
- .reader .rbar{padding-top:max(.45rem,env(safe-area-inset-top))}
+ .reader{height:100vh;height:-webkit-fill-available;height:100dvh;min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh}
+ .reader .rbar{padding-top:max(.45rem,env(safe-area-inset-top));padding-left:max(.45rem,env(safe-area-inset-left));padding-right:max(.45rem,env(safe-area-inset-right))}
  .reader .stage{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
  button,.btn,.ib,.fav,.chip{min-height:42px}
  .ib{min-width:42px;min-height:42px}
 }
+@media(max-width:800px){.reader .rbar .ib{min-width:44px;min-height:44px}}
 @media(prefers-reduced-motion:reduce){
  button,a,[role="button"],.chip,.nav,.fav,.ib{transition:none}
  button:active,a:active,[role="button"]:active,.chip:active,.nav:active,.fav:active,.ib:active{transform:none}
@@ -232,3 +233,9 @@ a.btn,a.btn:visited{text-decoration:none}
 /* Oculta globalmente as barras sem desativar a rolagem dos elementos. */
 *{scrollbar-width:none;-ms-overflow-style:none}
 *::-webkit-scrollbar{display:none;width:0;height:0}
+@media(max-width:800px) and (orientation:landscape){
+ main{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+ .form-side{padding-left:max(1rem,env(safe-area-inset-left));padding-right:max(1rem,env(safe-area-inset-right))}
+ .brand{padding-left:max(1.5rem,env(safe-area-inset-left));padding-right:max(1.5rem,env(safe-area-inset-right))}
+ .brand:after{left:max(1.5rem,env(safe-area-inset-left));top:max(1rem,env(safe-area-inset-top))}
+}

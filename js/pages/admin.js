@@ -43,7 +43,7 @@
    if(cv.size&&(cv.size>5242880||!/^image\/(jpeg|png|webp)$/.test(cv.type)))return UI.toast('Capa inválida: use JPG, PNG ou WebP até 5 MB.','error');
    if(pdf.size&&(pdf.size>52428800||pdf.type!=='application/pdf'))return UI.toast('PDF inválido ou maior que 50 MB.','error');
    if(fm.get('pub')&&!pdf.size&&!b?.pdf_path)return UI.toast('Envie o PDF para publicar o livro.','error');
-   UI.busy(btn,true);const id=b?.id||crypto.randomUUID(),old=[];
+   UI.busy(btn,true);const id=b?.id||App.uuid(),old=[];
    try{const row={title:fm.get('title').trim(),author:fm.get('author').trim(),description:fm.get('description').trim()||null,pages:+fm.get('pages')||null,sec_per_page:+fm.get('sec_per_page')||30,published_at:fm.get('published_at')||null,
      tags:fm.get('tags').split(',').map(x=>x.trim()).filter(Boolean),is_published:!!fm.get('pub'),is_featured:!!fm.get('feat')};
     if(cv.size){const p=`${id}/cover-${Date.now()}.${cv.type.split('/')[1]}`,u=await sb.storage.from('covers').upload(p,cv,{contentType:cv.type});if(u.error)throw u.error;if(b?.cover_path)old.push(['covers',b.cover_path]);row.cover_path=p}
