@@ -17,9 +17,9 @@ a{color:var(--sand)}[hidden]{display:none!important}
 .link{background:none;border:0;color:var(--sand);cursor:pointer;font:inherit;text-decoration:underline}
 .sk{background:linear-gradient(90deg,#2B2B2B,#383838,#2B2B2B);background-size:200% 100%;animation:sh 1.2s infinite;border-radius:8px}
 @keyframes sh{to{background-position:-200% 0}}
-#toasts{position:fixed;top:1rem;right:1rem;z-index:99;display:grid;gap:.5rem;max-width:min(92vw,360px)}
-.toast{display:flex;gap:.6rem;align-items:flex-start;padding:.8rem 1rem;border-radius:var(--r);background:var(--gray);border-left:4px solid var(--sand);box-shadow:0 6px 20px #0008}
-.toast.success{border-color:var(--ok)}.toast.error{border-color:var(--danger)}
+#toasts{position:fixed;top:1.2rem;right:1.2rem;z-index:99;display:grid;gap:.65rem;width:min(92vw,380px)}
+.toast{display:flex;align-items:center;gap:.8rem;min-width:0;padding:.9rem 1.05rem;border:0;border-radius:16px;background:linear-gradient(145deg,rgba(34,39,32,.98),rgba(25,29,24,.99));box-shadow:0 10px 28px #0005;color:var(--text);line-height:1.45;backdrop-filter:blur(12px)}
+.toast>i{flex:none;width:1.15rem;text-align:center;color:var(--sand)}.toast.success>i{color:var(--ok)}.toast.error>i{color:var(--danger)}.toast span{min-width:0;overflow-wrap:anywhere}
 .auth{display:grid;grid-template-columns:1.1fr 1fr;min-height:100vh}
 .brand{padding:3rem;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(160deg,#5C6B4Acc,#8B5E3C99 60%,#121212),var(--night)}
 .brand h1{font-size:clamp(3.5rem,8vw,7rem);color:var(--sand);text-transform:uppercase}
@@ -108,7 +108,7 @@ input[type=checkbox]{accent-color:var(--grove-hi);width:17px;height:17px;flex:no
 .card{background:linear-gradient(145deg,rgba(34,39,32,.96),rgba(25,29,24,.98));border:1px solid rgba(232,214,173,.09);border-radius:18px;padding:clamp(1rem,2.1vw,1.5rem);box-shadow:0 12px 34px #0003}
 .card.sect{padding:clamp(1rem,2.5vw,1.6rem)}.sect h3{font-size:1.5rem;color:#f3ecd9}
 .sub{line-height:1.55}.empty{border-style:dashed;border-color:#DCCAA324}.empty i{color:var(--sand)}
-#toasts{top:1.2rem;right:1.2rem}.toast{background:#222720;border:1px solid var(--line);border-left:4px solid var(--sand);border-radius:14px;backdrop-filter:blur(12px)}
+#toasts{top:1.2rem;right:1.2rem}.toast{border:0;border-radius:16px;background:linear-gradient(145deg,rgba(34,39,32,.98),rgba(25,29,24,.99));box-shadow:0 10px 28px #0005}.toast.success,.toast.error{border:0}
 .auth{background:var(--night)}.brand{position:relative;isolation:isolate;overflow:hidden;padding:clamp(2rem,6vw,5.5rem);background:linear-gradient(180deg,#10140d16 0%,#10140d55 48%,#10140df2 100%),linear-gradient(125deg,#5C6B4A88,#8B5E3C55),url('../assets/cover_refined.webp') center/cover no-repeat,var(--night)}
 .brand:after{content:"LSR  /  LEIA NO SEU RITMO";position:absolute;top:2rem;left:clamp(2rem,6vw,5.5rem);font:600 .72rem var(--fb);letter-spacing:.22em;color:#f1e6cdad}
 .brand h1{font-size:clamp(4rem,9vw,8.5rem);line-height:.82;max-width:8ch;text-shadow:0 5px 32px #0008}.brand p{max-width:38ch;color:#f1eee5;font-size:1.05rem}
