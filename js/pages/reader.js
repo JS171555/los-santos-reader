@@ -18,12 +18,12 @@
   const on=bms.some(b=>b.page===page),i=$('#bm');i.setAttribute('aria-pressed',on);i.firstElementChild.className=`fa-${on?'solid':'regular'} fa-bookmark`};
  async function render(){
   if(busy){again=true;return}busy=true;
-  do{again=false;const pg=await pdf.getPage(page),v0=pg.getViewport({scale:1}),st=$('#stage');
+  try{do{again=false;const pg=await pdf.getPage(page),v0=pg.getViewport({scale:1}),st=$('#stage');
    scale=mode==='width'?(st.clientWidth-32)/v0.width:mode==='height'?(st.clientHeight-32)/v0.height:scale;
-   const dpr=Math.min(window.devicePixelRatio||1,2),base=pg.getViewport({scale:scale*dpr}),ratio=Math.min(1,Math.sqrt(4e6/(base.width*base.height)),4096/base.width,4096/base.height),d=dpr*ratio,vp=pg.getViewport({scale:scale*d}),c=$('#cv');c.width=vp.width;c.height=vp.height;c.style.width=vp.width/d+'px';c.style.height=vp.height/d+'px';
+   const dpr=Math.min(window.devicePixelRatio||1,3),base=pg.getViewport({scale:scale*dpr}),ratio=Math.min(1,Math.sqrt(6e6/(base.width*base.height)),6144/base.width,6144/base.height),d=dpr*ratio,vp=pg.getViewport({scale:scale*d}),c=$('#cv');c.width=vp.width;c.height=vp.height;c.style.width=vp.width/d+'px';c.style.height=vp.height/d+'px';
    await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
    if(first){first=false;$('#rsk').remove();c.hidden=false;if(prog&&page>1)UI.toast('Continuando da página '+page+'.','info')}
-  }while(again);busy=false;ui()}
+  }while(again);ui()}catch{UI.toast('Não foi possível renderizar esta página. Tente novamente.','error')}finally{busy=false;if(again){again=false;render()}}}
  const go=n=>{n=Math.min(Math.max(Math.round(+n)||page,1),N);if(n===page)return ui();page=n;dirty=true;$('#stage').scrollTo(0,0);render();clearTimeout(tm);tm=setTimeout(save,2500)};
  const zoom=f=>{mode='free';scale=Math.min(4,Math.max(.3,scale*f));render()},fit=m=>{mode=m;render()};
  // Tempo ativo: conta só com aba visível, janela em foco e atividade nos últimos 60 s

@@ -66,7 +66,7 @@ textarea.input{min-height:90px;padding:.7rem .9rem;resize:vertical}
 .rt{flex:1;min-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rctl{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap}
 .pg{width:56px;min-height:38px;text-align:center;padding:0 .3rem}.sep{width:1px;height:24px;background:#444;margin:0 .2rem}
 .prog{height:4px;background:#2b2b2b}.prog i{display:block;height:100%;width:0;background:var(--grove-hi);transition:width .3s}
-.stage{flex:1;overflow:auto;display:flex;padding:1rem;background:#0c0c0c}.stage canvas{margin:auto;box-shadow:0 8px 30px #000a;flex:none}
+.stage{flex:1;min-height:0;overflow:auto;display:flex;padding:1rem;background:#0c0c0c}.stage canvas{margin:auto;box-shadow:0 8px 30px #000a;flex:none}
 .reader[data-theme=dark] canvas{filter:invert(.92) hue-rotate(180deg)}
 .reader[data-theme=light] .stage{background:#e9e1cf}.reader[data-theme=light] .rbar{background:var(--sand);color:var(--night);border-color:#0002}
 .reader[data-theme=light] .ib{color:var(--night);border-color:#0003}.reader[data-theme=light] .ib:hover{background:#0001}.reader[data-theme=light] .prog{background:#0002}
@@ -109,7 +109,7 @@ input[type=checkbox]{accent-color:var(--grove-hi);width:17px;height:17px;flex:no
 .card.sect{padding:clamp(1rem,2.5vw,1.6rem)}.sect h3{font-size:1.5rem;color:#f3ecd9}
 .sub{line-height:1.55}.empty{border-style:dashed;border-color:#DCCAA324}.empty i{color:var(--sand)}
 #toasts{top:1.2rem;right:1.2rem}.toast{background:#222720;border:1px solid var(--line);border-left:4px solid var(--sand);border-radius:14px;backdrop-filter:blur(12px)}
-.auth{background:var(--night)}.brand{position:relative;isolation:isolate;overflow:hidden;padding:clamp(2rem,6vw,5.5rem);background:linear-gradient(180deg,#10140d16 0%,#10140d55 48%,#10140df2 100%),linear-gradient(125deg,#5C6B4A88,#8B5E3C55),url('../assets/cover_refined.png') center/cover no-repeat,var(--night)}
+.auth{background:var(--night)}.brand{position:relative;isolation:isolate;overflow:hidden;padding:clamp(2rem,6vw,5.5rem);background:linear-gradient(180deg,#10140d16 0%,#10140d55 48%,#10140df2 100%),linear-gradient(125deg,#5C6B4A88,#8B5E3C55),url('../assets/cover_refined.webp') center/cover no-repeat,var(--night)}
 .brand:after{content:"LSR  /  LEIA NO SEU RITMO";position:absolute;top:2rem;left:clamp(2rem,6vw,5.5rem);font:600 .72rem var(--fb);letter-spacing:.22em;color:#f1e6cdad}
 .brand h1{font-size:clamp(4rem,9vw,8.5rem);line-height:.82;max-width:8ch;text-shadow:0 5px 32px #0008}.brand p{max-width:38ch;color:#f1eee5;font-size:1.05rem}
 .form-side{padding:clamp(1.2rem,5vw,4rem)}.form-side .card{width:min(100%,440px);padding:clamp(1.4rem,4vw,2.4rem);background:linear-gradient(145deg,#2B2B2B,#121212);border-color:#DCCAA318}
