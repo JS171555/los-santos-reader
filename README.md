@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/pwa/icon.svg" alt="Los Santos Reader — símbolo do livro" width="180">
+  <img src="assets/logo-transparent.png" alt="Los Santos Reader — símbolo do livro" width="180">
   <h1>Los Santos Reader</h1>
   <p><strong>Uma biblioteca digital para ler, acompanhar seu progresso e evoluir no seu ritmo.</strong></p>
   <p>
