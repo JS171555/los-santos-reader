@@ -1,119 +1,276 @@
 <div align="center">
-  <img src="assets/logo-transparent.png" alt="Los Santos Reader — símbolo do livro" width="180">
+  <img src="assets/logo-transparent.png" alt="Logo do Los Santos Reader" width="160">
   <h1>Los Santos Reader</h1>
-  <p><strong>Uma biblioteca digital para ler, acompanhar seu progresso e evoluir no seu ritmo.</strong></p>
+  <p><strong>Sua biblioteca. Seu progresso. Seu ritmo.</strong></p>
+  <p>Biblioteca digital com leitor de PDF, metas e conquistas, inspirada em Los Santos.</p>
   <p>
-    <img src="https://img.shields.io/badge/status-conclu%C3%ADdo-5C6B4A?style=flat-square" alt="Status: concluído">
-    <img src="https://img.shields.io/badge/PWA-instal%C3%A1vel-DCCAA3?style=flat-square&labelColor=121212" alt="PWA instalável">
-    <img src="https://img.shields.io/badge/idioma-pt--BR-8B5E3C?style=flat-square" alt="Idioma: português do Brasil">
+    <img src="https://img.shields.io/badge/JavaScript-ES6%2B-DCCAA3?style=flat-square&amp;labelColor=121212" alt="JavaScript ES6+">
+    <img src="https://img.shields.io/badge/Supabase-Auth%20%7C%20Database%20%7C%20Storage-5C6B4A?style=flat-square&amp;labelColor=121212" alt="Supabase: Auth, Database e Storage">
+    <img src="https://img.shields.io/badge/PWA-instal%C3%A1vel-8B5E3C?style=flat-square&amp;labelColor=121212" alt="PWA instalável">
+  </p>
+  <p>
+    <a href="#recursos">Recursos</a> ·
+    <a href="#executar-localmente">Execução local</a> ·
+    <a href="#configuração">Configuração</a> ·
+    <a href="#publicação-e-pwa">Publicação</a>
   </p>
 </div>
 
-O **Los Santos Reader** é um aplicativo web responsivo de leitura, com identidade visual inspirada em Los Santos. Reúne biblioteca digital, leitura de livros em PDF, acompanhamento de progresso, gamificação e administração de catálogo. Pode ser usado no navegador ou instalado como **Progressive Web App (PWA)** em dispositivos compatíveis.
+O **Los Santos Reader** é um aplicativo web responsivo para organizar uma biblioteca, ler livros em PDF e acompanhar hábitos de leitura. Combina favoritos, marcadores e retomada de progresso com um sistema de XP, níveis e conquistas.
 
-> **Status do produto: concluído.** O código do aplicativo e seus principais fluxos estão implementados. Para executar uma instalação própria, ainda é necessário configurar o projeto Supabase, aplicar o banco de dados, cadastrar as credenciais dos provedores externos e publicar o site em HTTPS.
+A aplicação usa HTML, CSS e JavaScript, com Supabase para autenticação, dados e arquivos. Funciona no navegador e pode ser instalada como **Progressive Web App (PWA)** em dispositivos compatíveis.
+
+> **Estado do projeto:** os principais fluxos estão implementados. Uma instalação própria requer configurar o Supabase, aplicar os scripts SQL e definir as URLs de autenticação. O login com Google exige configuração adicional do provedor.
+
+## Sumário
+
+- [Recursos](#recursos)
+- [Tecnologias](#tecnologias)
+- [Executar localmente](#executar-localmente)
+- [Configuração](#configuração)
+- [Primeiro acesso e catálogo](#primeiro-acesso-e-catálogo)
+- [Páginas do aplicativo](#páginas-do-aplicativo)
+- [Estrutura do repositório](#estrutura-do-repositório)
+- [Testes de integração](#testes-de-integração)
+- [Publicação e PWA](#publicação-e-pwa)
+- [Solução de problemas](#solução-de-problemas)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
 
 ## Recursos
 
-- **Biblioteca:** busca de livros, categorias, detalhes e capas.
-- **Leitor PDF:** navegação por páginas, zoom, ajuste de visualização, tela cheia, marcadores e retomada do progresso.
-- **Conta e autenticação:** cadastro e login por e-mail e senha, recuperação de senha, perfil e login com Google via Supabase Auth.
-- **Acompanhamento:** favoritos, metas de leitura, histórico e estatísticas de atividade.
-- **Gamificação:** pontos de experiência, níveis, conquistas e ranking.
-- **Administração:** painel para gerenciar livros, PDFs, capas e categorias.
-- **Preferências:** tema e opções do leitor, além de configurações de perfil.
-- **PWA:** instalação em dispositivos compatíveis, cache do shell da aplicação e página de contingência offline.
-- **Interface adaptável:** layout responsivo para desktop e dispositivos móveis.
+| Área | Funcionalidades |
+| --- | --- |
+| **Biblioteca** | Busca por título ou autor, categorias, capas, detalhes e favoritos. |
+| **Leitura** | Leitor PDF com navegação por páginas, zoom, ajuste à largura ou altura, tela cheia, marcadores e retomada do progresso. |
+| **Conta** | Cadastro, login por e-mail e senha, recuperação de senha e login com Google via Supabase Auth. |
+| **Progresso** | Metas diárias, histórico e estatísticas de atividade. |
+| **Gamificação** | XP, níveis, conquistas, notificações e ranking. |
+| **Perfil** | Avatar, preferências do leitor e controles de privacidade e participação no ranking. |
+| **Administração** | Gestão de livros, PDFs, capas e categorias, com estatísticas do catálogo. |
+| **PWA** | Instalação em dispositivos compatíveis, cache dos arquivos da interface e página de contingência offline. |
+
+O layout se adapta a computadores e dispositivos móveis. No leitor, também é possível navegar com as teclas de direção, `Page Up`, `Page Down`, `Home` e `End`.
+
+## Tecnologias
+
+| Tecnologia | Uso no projeto |
+| --- | --- |
+| HTML5, CSS3 e JavaScript | Interface, navegação e lógica no navegador, sem etapa de build obrigatória. |
+| [Supabase](https://supabase.com/) | Auth, banco PostgreSQL, políticas de acesso por linha (RLS) e Storage. |
+| [PDF.js](https://mozilla.github.io/pdf.js/) | Renderização dos livros em PDF. |
+| [GSAP](https://gsap.com/) | Animações da interface. |
+| Service Worker e Web App Manifest | Cache da interface e instalação como PWA. |
+
+As bibliotecas e os recursos visuais externos são carregados por CDN, conforme os endereços definidos nos arquivos HTML. A primeira visita depende de conexão com a internet.
+
+## Executar localmente
+
+### Pré-requisitos
+
+- Git para clonar o repositório.
+- Python 3 ou outro servidor de arquivos estáticos.
+- Navegador atualizado e acesso a um projeto Supabase configurado.
+
+Node.js e npm são necessários apenas para executar o teste de integração descrito adiante.
+
+### Clonar e iniciar
+
+```bash
+git clone https://github.com/JS171555/los-santos-reader.git
+cd los-santos-reader
+python3 -m http.server 8000
+```
+
+Abra [http://localhost:8000](http://localhost:8000). A página inicial encaminha para `login.html`.
+
+Sirva os arquivos por HTTP; abrir o HTML com `file://` não oferece o contexto necessário para o Service Worker. O endereço `localhost` permite testar recursos PWA durante o desenvolvimento.
+
+Para usar contas, catálogo e sincronização, conclua a configuração abaixo.
+
+## Configuração
+
+### 1. Conectar ao Supabase
+
+Crie um projeto no [Supabase](https://supabase.com/) e copie a URL e a chave pública. Em [`js/config.js`](js/config.js), substitua os valores existentes pelos da sua instalação:
+
+```javascript
+window.APP_CONFIG = {
+  SUPABASE_URL: 'https://SEU-PROJETO.supabase.co',
+  SUPABASE_ANON_KEY: 'SUA_CHAVE_PUBLICA'
+};
+```
+
+O campo `SUPABASE_ANON_KEY` recebe a chave pública `publishable` ou a chave legada `anon`. O nome do campo é mantido por compatibilidade com o código.
+
+**Use apenas a chave pública no frontend.** Chaves `service_role`, chaves secretas e o Client Secret do Google devem permanecer fora dos arquivos servidos ao navegador. A proteção dos dados depende das políticas RLS e das permissões do banco e do Storage.
+
+### 2. Preparar o banco de dados
+
+Em uma instalação nova, execute os arquivos abaixo no **SQL Editor** do Supabase, na ordem indicada:
+
+| Ordem | Script | Conteúdo |
+| --- | --- | --- |
+| 1 | [`001_fase1.sql`](sql/001_fase1.sql) | Perfis, papéis de usuário e políticas de acesso. |
+| 2 | [`002_fase2.sql`](sql/002_fase2.sql) | Livros, categorias, favoritos e buckets de capas e PDFs. |
+| 3 | [`003_fase3.sql`](sql/003_fase3.sql) | Progresso, sessões e marcadores de leitura. |
+| 4 | [`004_fase4.sql`](sql/004_fase4.sql) | XP, níveis, metas, conquistas, ranking e notificações. |
+| 5 | [`005_fase5.sql`](sql/005_fase5.sql) | Preferências, avatares, atividade e ajustes de segurança. |
+| 6 | [`006_auditoria_integridade.sql`](sql/006_auditoria_integridade.sql) | Integridade do progresso, limites de XP, privacidade e permissões. |
+
+Os scripts criam as estruturas e políticas utilizadas pelo aplicativo, incluindo os buckets `covers`, `pdfs` e `avatars`.
+
+**Para bancos existentes com as fases 001 a 005 já aplicadas:** confira a contagem real de páginas de todos os livros publicados e aplique apenas a fase 006 pendente. Não execute novamente os scripts anteriores.
+
+O campo `books.pages` deve conter a quantidade real de páginas do PDF. A fase 006 lista livros publicados sem esse dado; enquanto o catálogo não for corrigido, o progresso desses livros não será salvo. Não use o progresso antigo para estimar a contagem: ele recebia esse valor do navegador.
+
+### 3. Configurar autenticação e redirecionamentos
+
+No Supabase, configure o provedor de e-mail, a confirmação de cadastro e o envio de mensagens conforme a sua instalação.
+
+Em **Authentication → URL Configuration**, defina o **Site URL** e adicione as páginas usadas pelo aplicativo às URLs de redirecionamento permitidas:
+
+| Ambiente | Site URL | URLs de redirecionamento |
+| --- | --- | --- |
+| Desenvolvimento | `http://localhost:8000` | `http://localhost:8000/login.html` e `http://localhost:8000/reset.html` |
+| Produção | `https://seu-dominio` | `https://seu-dominio/login.html` e `https://seu-dominio/reset.html` |
+
+A página `login.html` recebe os retornos de cadastro e login social; `reset.html` recebe o fluxo de recuperação de senha. Se publicar em um subdiretório, inclua esse caminho nas URLs.
+
+Consulte a [documentação de redirecionamentos do Supabase](https://supabase.com/docs/guides/auth/redirect-urls) para ajustar as permissões ao ambiente.
+
+### 4. Habilitar login com Google (opcional)
+
+1. No Google Cloud Console, crie um cliente OAuth 2.0 do tipo **Aplicativo da Web**.
+2. Nas **URIs de redirecionamento autorizados** do Google, adicione a URL de callback exibida pelo provedor Google no Supabase, normalmente `https://<PROJECT_REF>.supabase.co/auth/v1/callback`.
+3. No Supabase, em **Authentication → Providers → Google**, habilite o provedor e informe o Client ID e o Client Secret.
+4. Confirme que a URL de `login.html` está autorizada no Supabase, conforme a etapa anterior.
+
+O callback do Google aponta para o Supabase; o retorno do aplicativo aponta para `login.html`. Após autenticar, o usuário é encaminhado à biblioteca.
+
+Veja também o [guia oficial de login com Google](https://supabase.com/docs/guides/auth/social-login/auth-google).
+
+## Primeiro acesso e catálogo
+
+1. Crie sua conta pelo aplicativo e confirme o e-mail, se essa opção estiver habilitada.
+2. No SQL Editor, execute [`sql/promover_admin.sql`](sql/promover_admin.sql), substituindo `SEU@EMAIL` pelo e-mail da conta criada.
+3. Acesse `admin.html` com essa conta e cadastre as categorias e os livros.
+4. Envie o PDF e a capa, informe a contagem real de páginas e marque o livro como publicado.
+5. Abra a biblioteca para conferir o livro e testar a leitura.
+
+Os limites de upload definidos no projeto são:
+
+| Arquivo | Formatos | Tamanho máximo |
+| --- | --- | --- |
+| Livro | PDF | 50 MB |
+| Capa | JPG, PNG ou WebP | 5 MB |
+| Avatar | JPG, PNG ou WebP | 2 MB |
+
+Os PDFs ficam em um bucket privado; capas e avatares usam buckets públicos. Mantenha as políticas de acesso configuradas pelos scripts.
 
 ## Páginas do aplicativo
 
 | Página | Arquivo | Finalidade |
 | --- | --- | --- |
-| Login, cadastro e recuperação | `login.html`, `reset.html` | Acesso à conta e recuperação de senha |
-| Biblioteca | `app.html` | Busca e navegação pelo catálogo |
-| Livro e leitor | `book.html`, `reader.html` | Detalhes do livro e leitura de PDF |
-| Progresso e conquistas | `game.html` | Metas, histórico, XP, conquistas e ranking |
-| Perfil e preferências | `profile.html`, `settings.html` | Dados da conta e personalização |
-| Administração | `admin.html` | Gestão do catálogo e categorias |
-| Experiência offline | `offline.html` | Página exibida quando não há conexão |
-
-## Tecnologias
-
-- HTML, CSS e JavaScript no navegador, sem etapa de build obrigatória.
-- [Supabase](https://supabase.com/) para autenticação, banco PostgreSQL, políticas RLS e armazenamento.
-- Supabase Auth com e-mail/senha e OAuth Google.
-- GSAP para animações e PDF.js para renderização de documentos PDF.
-- Service Worker e Web App Manifest para os recursos PWA.
-
-As dependências de interface são carregadas pelos endereços CDN indicados nos arquivos HTML; portanto, a primeira visita e recursos externos dependem de conexão com a internet.
-
-## Executar localmente
-
-Use um servidor HTTP local — não abra os arquivos diretamente com `file://`. O contexto seguro de `localhost` permite testar os recursos do PWA.
-
-```bash
-python3 -m http.server 8000
-```
-
-Abra [http://localhost:8000](http://localhost:8000). Para que login e recursos remotos funcionem, configure antes o Supabase conforme os passos abaixo.
-
-## Configurar o Supabase
-
-1. Crie um projeto no Supabase e copie a URL do projeto e a chave pública `anon`/`publishable`.
-2. Preencha `SUPABASE_URL` e `SUPABASE_ANON_KEY` em `js/config.js`. Use apenas a chave pública no frontend; **nunca** publique uma chave `service_role` ou segredo de provedor no repositório.
-3. No SQL Editor do Supabase, execute, em ordem, `sql/001_fase1.sql`, `sql/002_fase2.sql`, `sql/003_fase3.sql`, `sql/004_fase4.sql`, `sql/005_fase5.sql` e `sql/006_auditoria_integridade.sql`. A fase 6 é incremental: em bancos existentes, execute somente essa fase após conferir e preencher a contagem correta de páginas de cada livro publicado. Não derive esse dado do progresso antigo, pois era informado pelo cliente.
-4. Configure os provedores de autenticação e URLs de redirecionamento. No fluxo de cadastro por e-mail, configure também confirmação e envio de e-mail no Supabase.
-5. Para conceder acesso administrativo à própria conta, depois de criá-la, substitua `SEU@EMAIL` em `sql/promover_admin.sql` pelo e-mail correto e execute o comando conforme a política de acesso do seu projeto.
-
-As políticas de segurança do banco (RLS) são essenciais: não as desative para contornar erros de acesso. Revise as políticas e permissões antes de inserir dados reais ou disponibilizar o projeto publicamente.
-
-Livros publicados precisam ter `books.pages` preenchido com a contagem real do PDF. A migração 006 mostra os registros que precisam de revisão; até corrigir seus metadados, o leitor não gravará progresso nesses livros. Essa referência no catálogo permite ao servidor ignorar contagens arbitrárias enviadas pelo navegador.
-
-### Testes de integração
-
-O smoke test de RLS altera dados e, por segurança, recusa qualquer URL que não seja localhost. Execute-o apenas com uma conta e um livro descartáveis no Supabase local: instale `@supabase/supabase-js@2.45.4` temporariamente e defina `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `USER_EMAIL`, `USER_PASSWORD` e `TEST_BOOK_ID` antes de executar `node tests/rls-smoke.mjs`. Não use credenciais nem IDs de produção.
-
-### Login com Google
-
-O botão **Entrar com Google** está disponível nas telas de login e cadastro. Para habilitá-lo:
-
-1. No Google Cloud Console, crie um cliente OAuth 2.0 do tipo **Aplicativo da Web**.
-2. Em **URIs de redirecionamento autorizados** no Google, adicione a URL de callback informada na configuração do provedor Google no Supabase, normalmente `https://<PROJECT_REF>.supabase.co/auth/v1/callback`.
-3. No Supabase, abra **Authentication → Providers → Google**, habilite o provedor e informe o Client ID e o Client Secret do Google.
-4. Em **Authentication → URL Configuration**, configure o Site URL publicado e inclua nas URLs de redirecionamento permitidas a URL da página de login, por exemplo `https://seu-dominio/login.html`. Para desenvolvimento, inclua também `http://localhost:8000/login.html`.
-
-O fluxo retorna à página de login e encaminha a sessão autenticada para a biblioteca. Erros devolvidos pelo provedor são apresentados ao usuário. O Client Secret deve permanecer apenas no painel do Supabase.
-
-## Publicação e instalação PWA
-
-Publique todos os arquivos do projeto em um host estático com **HTTPS**. Atualize as URLs autorizadas do Supabase para corresponder ao domínio de produção. O acesso à conta, ao catálogo e à sincronização exige conexão e backend configurado.
-
-Em dispositivos compatíveis, abra o site publicado no navegador e use **Instalar app** ou **Adicionar à tela inicial**. No iOS, a instalação é feita pelo menu **Compartilhar → Adicionar à Tela de Início** no Safari.
-
-O modo offline mantém o shell e a página de contingência disponíveis conforme o cache do navegador. Ele **não** substitui o Supabase e não garante acesso offline à conta, ao catálogo remoto, aos PDFs ou aos demais dados remotos.
+| Entrada | [`index.html`](index.html) | Redirecionamento para o login. |
+| Autenticação | [`login.html`](login.html), [`reset.html`](reset.html) | Login, cadastro e recuperação de senha. |
+| Biblioteca | [`app.html`](app.html) | Busca e navegação pelo catálogo. |
+| Livro e leitor | [`book.html`](book.html), [`reader.html`](reader.html) | Detalhes do livro e leitura do PDF. |
+| Progresso | [`game.html`](game.html) | Metas, histórico, conquistas, XP e ranking. |
+| Perfil | [`profile.html`](profile.html), [`settings.html`](settings.html) | Dados da conta, privacidade e preferências. |
+| Administração | [`admin.html`](admin.html) | Gestão do catálogo e categorias. |
+| Offline | [`offline.html`](offline.html) | Página de contingência quando não há conexão. |
 
 ## Estrutura do repositório
 
 ```text
-.
-├── admin.html, app.html, book.html, reader.html, ...  # páginas do app
-├── assets/                                            # logo, capas e ícones
-├── css/styles.css                                     # estilos e layout responsivo
-├── js/                                                # autenticação, dados e páginas
-├── sql/                                               # esquema, políticas e funções do banco
-├── tests/                                             # verificações de segurança/integração
-├── manifest.webmanifest                               # metadados PWA
-└── sw.js                                              # cache do shell e fallback offline
+los-santos-reader/
+├── assets/                    # Identidade visual e ícones PWA
+├── css/
+│   └── styles.css             # Estilos e layout responsivo
+├── js/
+│   ├── config.js              # Configuração pública do Supabase
+│   ├── auth.js                # Autenticação e sessão
+│   ├── data.js                # Acesso a dados e utilitários do catálogo
+│   ├── pages/                 # Lógica de cada página
+│   └── ...                    # Interface, navegação, recompensas e PWA
+├── sql/                       # Esquema, políticas e funções do banco
+├── tests/
+│   └── rls-smoke.mjs           # Teste de integração em Supabase local
+├── index.html                 # Entrada do aplicativo
+├── *.html                     # Páginas do aplicativo
+├── manifest.webmanifest       # Metadados de instalação
+├── sw.js                      # Cache da interface e fallback offline
+├── _headers                   # Cabeçalhos para hosts compatíveis
+└── AUDITORIA_TECNICA.md        # Registro da auditoria técnica
 ```
 
-## Segurança e operação
+## Testes de integração
 
-- Mantenha no cliente somente a URL do Supabase e a chave pública `anon`/`publishable`.
-- Guarde Client Secrets e chaves administrativas em configurações seguras do serviço, nunca em arquivos servidos ao navegador.
-- Ative e teste as políticas RLS antes de usar dados de usuários reais.
-- Use HTTPS em produção para autenticação e instalação PWA.
-- Disponibilidade de login social, confirmação de e-mail, armazenamento e dados depende das configurações do projeto Supabase.
+O arquivo [`tests/rls-smoke.mjs`](tests/rls-smoke.mjs) verifica restrições de acesso, proteção de papéis e XP, privacidade do progresso e limites de salvamento.
+
+**O teste grava dados e aceita apenas um Supabase local.** Prepare uma instância local descartável com os scripts SQL aplicados, uma conta de usuário comum e um livro publicado com `books.pages` válido. O servidor de arquivos em `localhost:8000` não substitui essa instância do Supabase.
+
+Instale a dependência temporária na raiz do repositório:
+
+```bash
+npm install --no-save --package-lock=false @supabase/supabase-js@2.45.4
+```
+
+Defina as variáveis no ambiente do terminal e execute:
+
+```bash
+export SUPABASE_URL='http://127.0.0.1:54321'
+export SUPABASE_ANON_KEY='CHAVE_PUBLICA_DO_SUPABASE_LOCAL'
+export USER_EMAIL='leitor@example.com'
+export USER_PASSWORD='SENHA_DA_CONTA_LOCAL'
+export TEST_BOOK_ID='UUID_DO_LIVRO_LOCAL'
+
+node tests/rls-smoke.mjs
+```
+
+Use a URL e a chave da sua instância local. Não use credenciais, usuários ou livros de produção. O teste retorna código `0` em caso de sucesso, `1` se uma verificação falhar e `2` para erros de configuração ou preparação.
+
+## Publicação e PWA
+
+Publique os arquivos estáticos em um host com **HTTPS**, preservando a estrutura de diretórios. Antes de disponibilizar a instalação:
+
+- Configure `js/config.js` com o projeto Supabase correto.
+- Confirme a aplicação dos scripts SQL e as políticas RLS e de Storage.
+- Atualize o Site URL e os redirecionamentos de login e recuperação de senha para o domínio publicado.
+- Verifique o suporte do host ao arquivo `_headers`; se necessário, configure os cabeçalhos no próprio serviço.
+- Teste cadastro, login, recuperação de senha, abertura de PDF e salvamento de progresso.
+
+### Instalar o aplicativo
+
+Em um navegador compatível, abra o site e use **Instalar app** ou **Adicionar à tela inicial**. No iOS, utilize **Compartilhar → Adicionar à Tela de Início** no Safari.
+
+### Funcionamento offline
+
+O Service Worker mantém em cache os arquivos da interface e oferece uma página de contingência conforme o cache disponível no navegador.
+
+**Autenticação, catálogo remoto, sincronização e acesso aos PDFs dependem de conexão e do Supabase configurado.** A instalação como PWA não garante leitura de livros offline.
+
+## Solução de problemas
+
+| Situação | O que verificar |
+| --- | --- |
+| Login ou catálogo não funciona | URL e chave pública em `js/config.js`, scripts SQL aplicados e conexão com o Supabase. |
+| E-mail de confirmação não chega | Configuração do provedor de e-mail, confirmação de cadastro e envio de mensagens no Supabase. |
+| Recuperação de senha retorna à página errada | Site URL e autorização da URL completa de `reset.html`. |
+| Login com Google falha | Provedor habilitado, Client ID/Secret, callback do Google e URL de `login.html` autorizada no Supabase. |
+| Livro não aparece na biblioteca | Estado de publicação, PDF enviado e permissões da conta. |
+| Progresso não é salvo | Fase 006 aplicada e `books.pages` preenchido com a contagem real do PDF. |
+| Opção de instalar não aparece | HTTPS ou `localhost`, suporte do navegador e registro do Service Worker. |
+
+Não desative as políticas RLS para contornar falhas de acesso. Revise as permissões e a configuração da instalação.
+
+## Contribuição
+
+Para relatar um problema ou sugerir uma melhoria, [abra uma issue](https://github.com/JS171555/los-santos-reader/issues). Inclua os passos para reproduzir, o comportamento esperado e o navegador utilizado, sem compartilhar credenciais.
+
+Para propor alterações, crie uma branch com um objetivo definido e envie um pull request descrevendo a mudança e como ela foi validada.
 
 ## Licença
 
-O repositório não especifica uma licença. Consulte o proprietário antes de redistribuir o código ou os materiais visuais.
+O repositório ainda não especifica uma licença. Consulte o proprietário antes de redistribuir o código ou os materiais visuais.
