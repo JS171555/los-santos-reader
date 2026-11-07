@@ -24,7 +24,7 @@
  async function load(){
   view.innerHTML=`<div class="grid shelf-track" aria-label="Carregando capas">${'<div class="book" aria-hidden="true"><div class="cv sk"></div></div>'.repeat(8)}</div>`;
   try{const [b,c,f,p]=await Promise.all([D.books(''),App.sb.from('categories').select('*').order('name'),App.sb.from('favorites').select('book_id'),App.sb.from('reading_progress').select('book_id,status,updated_at')]);
-   if(b.error||c.error||f.error)throw 0;books=orderBooks(b.data);allBooks=books;cats=c.data;favs=new Set(f.data.map(x=>x.book_id));prog=new Map((p.data||[]).map(x=>[x.book_id,x]));chips();draw()}
+   if(b.error||c.error||f.error||p.error)throw 0;books=orderBooks(b.data);allBooks=books;cats=c.data;favs=new Set(f.data.map(x=>x.book_id));prog=new Map((p.data||[]).map(x=>[x.book_id,x]));chips();draw()}
   catch{D.err(view,load)}}
  async function search(q){const seq=++searchSeq;if(!q.trim()){st.q='';books=allBooks;draw();return}
   try{const {data,error}=await D.books(q);if(error)throw error;if(seq!==searchSeq)return;st.q=q;books=orderBooks(data);draw()}
