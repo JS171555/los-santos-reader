@@ -5,7 +5,7 @@ const D=window.D={
  books(q=''){let r=App.sb.from('books').select('*,book_categories(categories(id,name))').eq('is_published',true).order('created_at',{ascending:false});
   q=q.replace(/[%,()*.:"\\]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);return q?r.or(`title.ilike.%${q}%,author.ilike.%${q}%`):r},
  catIds:b=>b.book_categories.map(x=>x.categories.id),
- card(b,on){const t=D.esc(b.title);return `<div class="book"><a href="book.html?id=${b.id}"><div class="cv">${b.cover_path?`<img loading="lazy" decoding="async" alt="Capa de ${t}" src="${D.cover(b.cover_path)}">`:`<span>${t}</span>`}</div><h3>${t}</h3><p>${D.esc(b.author)}</p></a><button class="fav${on?' on':''}" data-id="${b.id}" aria-label="Favoritar ${t}" aria-pressed="${on}"><i class="fa-${on?'solid':'regular'} fa-heart"></i></button></div>`},
+ card(b,on){const t=D.esc(b.title);return `<div class="book" role="listitem"><a href="book.html?id=${b.id}"><div class="cv">${b.cover_path?`<img loading="lazy" decoding="async" alt="Capa de ${t}" src="${D.cover(b.cover_path)}">`:`<span>${t}</span>`}</div><h3>${t}</h3><p>${D.esc(b.author)}</p></a><button class="fav${on?' on':''}" data-id="${b.id}" aria-label="Favoritar ${t}" aria-pressed="${on}"><i class="fa-${on?'solid':'regular'} fa-heart"></i></button></div>`},
  paint(btn,on){btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);btn.firstElementChild.className=`fa-${on?'solid':'regular'} fa-heart`},
  async toggleFav(btn,favs){const id=btn.dataset.id,on=!favs.has(id);on?favs.add(id):favs.delete(id);D.paint(btn,on);
   const {error}=on?await App.sb.from('favorites').insert({book_id:id}):await App.sb.from('favorites').delete().eq('book_id',id);
